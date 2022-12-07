@@ -12,6 +12,7 @@ datfr = datfr[arx.smiles.notna()]
 # print(datfr)
 df_no_dup = datfr.drop_duplicates(['smiles'])
 
+
 df_no_dup = df_no_dup['IC50'].apply(lambda x: x.split()[0].replace(">", ''))
 df_no_dup = df_no_dup['IC50'].apply(lambda x: x.split()[0].replace("<", ''))
 df_no_dup=df_no_dup["IC50"].astype(float)
