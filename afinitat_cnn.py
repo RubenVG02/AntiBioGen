@@ -102,4 +102,12 @@ def model_cnn():
     modelo.compile(optimizer="adam", loss="mse",
                    metrics=keras.keras.metrics.MeanSquaredError())
 
-    modelo.fit()
+
+# utilizarem el 80/20 per entrenar y fer test al nostre model
+training = len(arx)*0.8
+test = len(arx)*0.2
+
+
+r = modelo.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=10)
+plt.plot(r.history["loss"], label="loss")
+plt.plot(r.history["val_loss"], label="val_loss")
