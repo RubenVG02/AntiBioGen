@@ -2,6 +2,7 @@ import pandas as pd
 from chembl_webresource_client.new_client import new_client
 import csv
 
+
 def seleccio_mol(id, nom_arx="dades", nom_df="df"):
     '''
     Parametres:
@@ -41,39 +42,40 @@ def neteja_dades_rnn(nom_arx="drugs.csv", nom_arx2="dades_netes"):
     # Quants elements utilitzes per entrenar el model
     print(df2.value_counts())
 
-def neteja_dades_afinitat(nom_arx="inh",nom_desti="cnn_arreglat"):
+
+def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
     ''' 
         Paràmetres:
          -nom_arx: Nom de l'arxiu d'origen a modificar, en format tsv
-         -nom_destí: Nom de l'arxiú de destí que es crearà
-    
-    '''
-    with open (f"{nom_arx}.tsv","r") as file:
-        df=pd.read_csv(file, sep="\t", on_bad_lines="skip",low_memory=False)
-        columna_cadena=df["BindingDB Target Chain  Sequence"]
-        columna_50=df["IC50 (nM)"]
-        columna_smiles=df["Ligand SMILES"]
+         -nom_destí: Nom de l'arxiu de destí que es crearà
 
-    cadena=[]
+    '''
+    with open(f"{nom_arx}.tsv", "r") as file:
+        df = pd.read_csv(file, sep="\t", on_bad_lines="skip", low_memory=False)
+        columna_cadena = df["BindingDB Target Chain  Sequence"]
+        columna_50 = df["IC50 (nM)"]
+        columna_smiles = df["Ligand SMILES"]
+
+    cadena = []
     for i in columna_cadena:
         cadena.append(i)
-    ic50=[]
+    ic50 = []
     for i in columna_50:
         ic50.append(i)
-    smiles=[]
+    smiles = []
     for i in columna_smiles:
         smiles.append(i)
-        
-    headers=["smiles", "IC50","sequence"]
-    listas=[smiles, ic50, cadena]
-    with open(f"{nom_desti}.csv","w") as archivo:
-        write=csv.writer(archivo)
+
+    headers = ["smiles", "IC50", "sequence"]
+    listas = [smiles, ic50, cadena]
+    with open(f"{nom_desti}.csv", "w") as archivo:
+        write = csv.writer(archivo)
         write.writerow(headers)
         write.writerows(zip(*listas))
-    
+
     return f"{nom_desti}.csv"
 
 #selecció = seleccio_mol("CHEMBL6137", nom_df="datafr")
 
-neteja_dades_afinitat()
 
+neteja_dades_afinitat()
