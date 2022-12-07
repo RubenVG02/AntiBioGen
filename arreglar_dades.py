@@ -50,7 +50,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
          -nom_destí: Nom de l'arxiu de destí que es crearà
 
     '''
-    with open(f"{nom_arx}.tsv", "r") as file:
+    with open(f"{nom_arx}.tsv", "r", encoding="utf8") as file:
         df = pd.read_csv(file, sep="\t", on_bad_lines="skip", low_memory=False)
         columna_cadena = df["BindingDB Target Chain  Sequence"]
         columna_50 = df["IC50 (nM)"]
@@ -68,7 +68,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
 
     headers = ["smiles", "IC50", "sequence"]
     listas = [smiles, ic50, cadena]
-    with open(f"{nom_desti}.csv", "w") as archivo:
+    with open(f"{nom_desti}.csv", "w", encoding="utf8") as archivo:
         write = csv.writer(archivo)
         write.writerow(headers)
         write.writerows(zip(*listas))
