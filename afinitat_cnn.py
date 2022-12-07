@@ -1,6 +1,8 @@
 from arreglar_dades import neteja_dades_afinitat
 import pandas as pd
-from tensorflow import keras
+import tensorflow as tf
+import matplotlib.pyplot as plt
+import numpy as np
 
 dades = neteja_dades_afinitat()
 
@@ -24,7 +26,7 @@ int_fasta = dict(zip(elements_fasta, range(1, len(elements_fasta))))
 # Per associar tots els elements amb un int determinat(range és 1, len+1 perquè es plenen amb zeros per arribar a maxim_fasta)
 
 
-def convertir(arx):
+def convertir(arx=arx):
     '''
         Funció per convertir tots els elements (tant smiles, com fasta) en int, per tal de ser entrenats al model
 
@@ -55,59 +57,72 @@ def model_cnn():
 
     '''
     # model per smiles
-    i = keras.keras.Input(shape=(maxim_smiles,))
-    embed = keras.keras.layers.Embedding(input_dim=len(
-        elements_smiles), input_length=maxim_smiles, output_dim=128)(i)
-    x = keras.keras.layers.Conv1D(
+    i = tf.keras.Input(shape=(maxim_smiles,))
+    embed = tf.keras.layers.Embedding(input_dim=len(
+        elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(i)
+    x = tf.keras.layers.Conv1D(
         filters=32, kernel_size=3, padding="SAME")(embed)
-    x = keras.keras.layers.PReLU()(x)
-    x = keras.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
-    x = keras.keras.layers.PReLU()(x)
-    x = keras.keras.layers.Conv1D(
+    x = tf.keras.layers.PReLU()(x)
+    x = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
+    x = tf.keras.layers.PReLU()(x)
+    x = tf.keras.layers.Conv1D(
         filters=128, kernel_size=3, padding="SAME")(x)
-    x = keras.keras.layers.PReLU()(x)
-    pool = keras.keras.layers.GlobalAvgPool1D()(
+    x = tf.keras.layers.PReLU()(x)
+    pool = tf.keras.layers.GlobalMaxPooling1D()(
         x)  # maxpool per obtenir un vector de 1d
 
     # model per fastas
-    i2 = keras.keras.Input(shape=(maxim_smiles,))
-    embed2 = keras.keras.layers.Embedding(input_dim=len(
-        elements_fasta+1), input_length=maxim_fasta, output_dim=256)(i2)
-    x2 = keras.keras.layers.Conv1D(
+    i2 = tf.keras.Input(shape=(maxim_smiles,))
+    embed2 = tf.keras.layers.Embedding(input_dim=len(
+        elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(i2)
+    x2 = tf.keras.layers.Conv1D(
         filters=32, kernel_size=3, padding="SAME")(embed2)
-    x2 = keras.keras.layers.PReLU()(x2)
-    x2 = keras.keras.layers.Conv1D(
+    x2 = tf.keras.layers.PReLU()(x2)
+    x2 = tf.keras.layers.Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
-    x2 = keras.keras.layers.PReLU()(x2)
-    x2 = keras.keras.layers.Conv1D(
+    x2 = tf.keras.layers.PReLU()(x2)
+    x2 = tf.keras.layers.Conv1D(
         filters=128, kernel_size=3, padding="SAME")(x2)
-    x2 = keras.keras.layers.PReLU()(x2)
-    pool2 = keras.keras.layers.GlobalMaxPooling1D()(
+    x2 = tf.keras.layers.PReLU()(x2)
+    pool2 = tf.keras.layers.GlobalMaxPooling1D()(
         x2)  # maxpool per obtenir un vector de 1d
 
-    junt = keras.keras.layers.concatenate(pool, pool2)
+    junt = tf.keras.layers.concatenate(inputs=[pool, pool2])
 
     # dense
 
-    de = keras.keras.layers.Dense(units=512, activation="relu",)(junt)
-    dr = keras.keras.layers.Dropout(0.2)(de)
-    de2 = keras.keras.layers.Dense(units=256, activation="relu")(dr)
+    de = tf.keras.layers.Dense(units=512, activation="relu",)(junt)
+    dr = tf.keras.layers.Dropout(0.2)(de)
+    de2 = tf.keras.layers.Dense(units=256, activation="relu")(dr)
 
     # output
 
-    op = keras.keras.layers.Dense(1, activation="relu")(de2)
+    op = tf.keras.layers.Dense(1, activation="relu")(de2)
 
-    modelo = keras.keras.models.Model(inputs=[i, i2], output=op)
+    modelo = tf.keras.models.Model(inputs=[i, i2], outputs=[op])
 
     modelo.compile(optimizer="adam", loss="mse",
-                   metrics=keras.keras.metrics.MeanSquaredError())
+                   metrics=tf.keras.metrics.MeanSquaredError())
+
+    tamany_per_epoch = 5000  # Utilitzem un valor elevat per poder obtenir millors resultats
+    # utilizarem el 80/20 per entrenar y fer test al nostre model
+    training = len(arx)*0.8
+
+    train = arx[:int(training)]
+    test = arx[int(training):]
+    final = tamany_per_epoch
+    for i in range(20):  # utilitzarem 20 epochs
+        while tamany_per_epoch < len(arx):
+            X_smiles, X_fasta, T_IC50 = convertir(arx[0:final])
+            X_smiles_test, X_fasta_test, T_IC50_test = convertir(test)
+
+            r = modelo.fit({X_smiles, X_fasta}, {"output": np.array(T_IC50)},
+                           validation_data=(X_smiles_test, X_fasta_test), epochs=1, batch_size=64)
+
+        final += tamany_per_epoch
+
+    plt.plot(r.history["loss"], label="loss")
+    plt.plot(r.history["val_loss"], label="val_loss")
 
 
-# utilizarem el 80/20 per entrenar y fer test al nostre model
-training = len(arx)*0.8
-test = len(arx)*0.2
-
-
-r = modelo.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=10)
-plt.plot(r.history["loss"], label="loss")
-plt.plot(r.history["val_loss"], label="val_loss")
+model_cnn()
