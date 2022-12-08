@@ -83,6 +83,16 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
     df_no_dup = df_no_dup[df_no_dup["IC50"] < 1000000]
     df_no_dup = df_no_dup[df_no_dup["smiles"].str.len() < 100]
     df_no_dup = df_no_dup[df_no_dup["sequence"].str.len() < 5000]
+    smiles_sense_simbols = []
+    for i in df_no_dup["smiles"]:
+        smiles_sense_simbols.append(i.replace("@", "").replace("\\",
+                                                               "").replace("/", "").replace(".", ""))
+
+    df_no_dup["smiles"] = smiles_sense_simbols
+    del smiles_sense_simbols
+    df_no_dup["sequence"] = df_no_dup["sequence"].apply(
+        lambda x: x.upper())
+    df_no_dup = df_no_dup.sample(frac=1).reset_index(drop=True)
     df_no_dup.to_csv(f"{nom_desti}.csv", index=False, sep=",")
     return f"{nom_desti}.csv"
 
