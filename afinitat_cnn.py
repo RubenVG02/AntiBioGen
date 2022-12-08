@@ -65,6 +65,9 @@ def convertir(arx=arx):
     return smiles_amb_numeros, fasta_amb_numeros, ic50_numeros
 
 
+X_test_smile, X_test_fasta, T_test_IC50 = convertir(arx[20000:])
+
+
 def model_cnn():
     '''
         Model per entrenar les dades.
@@ -144,13 +147,14 @@ def model_cnn():
 
     train = arx[:20000]
     test = arx[20000:]
-    inici = 0
-    final = tamany_per_epoch
-    X_test_smile, X_test_fasta, T_test_IC50 = convertir(test)
+
     epochs = 100
     for epoch in range(epochs):
+        inici = 0
+        final = tamany_per_epoch
         print(f"Començant el epoch {epoch+1}")
         while final < 20000:
+            print("prueba funciona")
             X_smiles, X_fasta, y_train = convertir(train[inici:final])
 
             r = modelo.fit({'smiles_input': np.array(X_smiles),
