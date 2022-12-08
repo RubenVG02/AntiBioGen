@@ -1,13 +1,15 @@
-from arreglar_dades import neteja_dades_afinitat
+
 import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import ModelCheckpoint
+from keras import backend as K
 
-dades = neteja_dades_afinitat()
+#dades = neteja_dades_afinitat()
 
-arx = pd.read_csv(dades, sep=",")
+arx = pd.read_csv(
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\cnn_arreglat.csv", sep=",")
 
 
 # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
@@ -108,8 +110,19 @@ def model_cnn():
 
     modelo = tf.keras.models.Model(inputs=[i, i2], outputs=[op])
 
-    modelo.compile(optimizer="adam", loss="mse",
-                   metrics=tf.keras.metrics.MeanSquaredError())
+    # loss function
+    def root_mean_squared_error(y_true, y_pred):
+        return K.sqrt(mean_squared_error(y_true, y_pred))
+
+    # accuracy metric
+    def r2_score(y_true, y_pred):
+        SS_res = K.sum(K.square(y_true - y_pred))
+        SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
+        return (1-SS_res/(SS_tot)+K.epsilon())
+    modelo.compile(optimizer='adam',
+                   # 'mse', 'mae', root_mean_squared_error
+                   loss={'output': 'mae'},
+                   metrics={'output': r2_score})
 
     #############
     save_model_path = "affinity-best.hdf5"
@@ -124,21 +137,24 @@ def model_cnn():
 
     train = arx[:20000]
     test = arx[20000:]
+    inici = 0
     final = tamany_per_epoch
     volta = 1
     for i in range(5):  # utilitzarem 20 epochs
 
         print(f"Començant el epoch {volta}")
-        while final < len(arx):
-            X_smiles, X_fasta, T_IC50 = convertir(arx[0:final])
+        while final < 20000:
+            X_smiles, X_fasta, y_train = convertir(train[inici:final])
             X_test_smile, X_test_fasta, T_test_IC50 = convertir(test)
 
-            r = modelo.fit({X_smiles, X_fasta}, {"output": np.array(T_IC50)},
+            r = modelo.fit({'smiles_input': np.array(X_smiles),
+                            'fasta_input': np.array(X_fasta)}, {"output": np.array(y_train)},
                            validation_data={'smiles_input': np.array(X_test_smile),
                                             'fasta_input': np.array(X_test_fasta)}, epochs=1, batch_size=64, callbacks=[checkpoint])
 
-        final += tamany_per_epoch
-        volta += 1
+            inici += tamany_per_epoch
+            final += tamany_per_epoch
+            volta += 1
 
     plt.plot(r.history["loss"], label="loss")
     plt.plot(r.history["val_loss"], label="val_loss")
