@@ -141,20 +141,21 @@ def model_cnn():
                                  save_best_only=True)
 
     # Utilitzem un valor elevat per poder obtenir millors resultats
-    tamany_per_epoch = 5000
+    tamany_per_epoch = 3000
     # utilizarem el 80/20 per entrenar y fer test al nostre model
     # training = len(arx)*0.8
 
     train = arx[:20000]
-    test = arx[20000:]
+    loss = []
+    loss_validades = []
+    epochs = 4
 
-    epochs = 100
-    for epoch in range(epochs):
+    for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0
         final = tamany_per_epoch
         print(f"Començant el epoch {epoch+1}")
+
         while final < 20000:
-            print("prueba funciona")
             X_smiles, X_fasta, y_train = convertir(train[inici:final])
 
             r = modelo.fit({'smiles_input': np.array(X_smiles),
@@ -164,9 +165,15 @@ def model_cnn():
 
             inici += tamany_per_epoch
             final += tamany_per_epoch
+        if epoch > 0:
+            print("He hecho append del loss y del val_loss")
+            loss.append(r.history["loss"])
+            loss_validades.append(r.history["val_loss"])
 
-    plt.plot(r.history["loss"], label="loss")
-    plt.plot(r.history["val_loss"], label="val_loss")
+    epochs_tot = [range(1, epochs + 1)]
+    plt.plot(epochs_tot, loss, label="loss")
+    plt.plot(epochs_tot, loss_validades, label="val_loss")
+    plt.legend()
     plt.show()
 
 
