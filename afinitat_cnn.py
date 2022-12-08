@@ -148,7 +148,7 @@ def model_cnn():
     train = arx[:20000]
     loss = []
     loss_validades = []
-    epochs = 4
+    epochs = 10
 
     for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0
@@ -165,14 +165,13 @@ def model_cnn():
 
             inici += tamany_per_epoch
             final += tamany_per_epoch
-        if epoch > 0:
-            print("He hecho append del loss y del val_loss")
-            loss.append(r.history["loss"])
-            loss_validades.append(r.history["val_loss"])
 
-    epochs_tot = [range(1, epochs + 1)]
-    plt.plot(epochs_tot, loss, label="loss")
-    plt.plot(epochs_tot, loss_validades, label="val_loss")
+        loss.append(r.history["loss"])
+        loss_validades.append(r.history["val_loss"])
+        print("He hecho append del loss y del val_loss")
+
+    plt.plot(range(epochs), loss, label="loss")
+    plt.plot(range(epochs), loss_validades, label="val_loss")
     plt.legend()
     plt.show()
 
