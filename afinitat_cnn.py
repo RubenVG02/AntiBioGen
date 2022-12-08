@@ -6,6 +6,7 @@ import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
 from keras.losses import mean_squared_error
+from keras.regularizers import l2
 
 # dades = neteja_dades_afinitat()
 
@@ -22,7 +23,7 @@ elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', '
 int_smiles = dict(zip(elements_smiles, range(1, len(elements_smiles)+1)))
 # Per associar tots els elements amb un int determinat
 
-maxim_fasta = 4000
+maxim_fasta = 5000
 elements_fasta = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
                   'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']  # Format pels diferents aa que formen els fasta
 
@@ -32,9 +33,9 @@ int_fasta = dict(zip(elements_fasta, range(1, len(elements_fasta))))
 
 def convertir(arx=arx):
     '''
-        Funció per convertir tots els elements (tant smiles, com fasta) en int, per tal de ser entrenats al model
+# Funció per convertir tots els elements (tant smiles, com fasta) en int, per tal de ser entrenats al model
 
-    '''
+'''
 
     smiles_amb_numeros = []  # Smiles obtinguts amb int_smiles[1] i els smiles del df
     for i in arx.smiles:
@@ -69,17 +70,19 @@ X_test_smile, X_test_fasta, T_test_IC50 = convertir(arx[20000:])
 
 
 def model_cnn():
-    '''
+    ''' 
         Model per entrenar les dades.
-
     '''
-    # model per smiles
+    # regulador kernel
+    regulador = l2(0.001)
+
+    # model per a smiles
     smiles_input = tf.keras.Input(
         shape=(maxim_smiles,), dtype='int32', name='smiles_input')
     embed = tf.keras.layers.Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
     x = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_smiles))(embed)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_smiles), activity_regularizer=regulador, kernel_regularizer=regulador)(embed)
     x = tf.keras.layers.PReLU()(x)
     x = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
     x = tf.keras.layers.PReLU()(x)
@@ -94,7 +97,7 @@ def model_cnn():
     embed2 = tf.keras.layers.Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
     x2 = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_fasta))(embed2)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_fasta), activity_regularizer=regulador, kernel_regularizer=regulador)(embed2)
     x2 = tf.keras.layers.PReLU()(x2)
     x2 = tf.keras.layers.Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
@@ -131,24 +134,28 @@ def model_cnn():
         SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
         return (1-SS_res/(SS_tot)+K.epsilon())
     modelo.compile(optimizer='adam',
-                   loss={'output': 'mae'},
+                   # categorical_crossentropy/mean_squared_logarithmic_error
+                   loss={'output': tf.keras.losses.CategoricalCrossentropy()},
                    metrics={'output': r2_score})
-    #############
+    # s
     save_model_path = "model.hdf5"
     checkpoint = ModelCheckpoint(save_model_path,
                                  monitor='val_loss',
                                  verbose=1,
                                  save_best_only=True)
 
+    callback = tf.keras.callbacks.EarlyStopping(
+        monitor='val_loss', patience=15)
+
     # Utilitzem un valor elevat per poder obtenir millors resultats
-    tamany_per_epoch = 3000
+    tamany_per_epoch = 4000
     # utilizarem el 80/20 per entrenar y fer test al nostre model
     # training = len(arx)*0.8
 
-    train = arx[:20000]
+    train = arx[:22000]
     loss = []
     loss_validades = []
-    epochs = 10
+    epochs = 50
 
     for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0
@@ -161,7 +168,7 @@ def model_cnn():
             r = modelo.fit({'smiles_input': np.array(X_smiles),
                             'fasta_input': np.array(X_fasta)}, {'output': np.array(y_train)},
                            validation_data=({'smiles_input': np.array(X_test_smile),
-                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint], epochs=1, batch_size=64)
+                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint, callback], epochs=1, batch_size=64, shuffle=True)
 
             inici += tamany_per_epoch
             final += tamany_per_epoch
