@@ -81,6 +81,8 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
     df_no_dup["IC50"] = df_no_dup["IC50"].str.replace(r"[<>]", "", regex=True)
     df_no_dup["IC50"] = df_no_dup["IC50"].astype(float)
     df_no_dup = df_no_dup[df_no_dup["IC50"] < 1000000]
+    df_no_dup = df_no_dup[df_no_dup["smiles"].str.len() < 100]
+    df_no_dup = df_no_dup[df_no_dup["sequence"].str.len() < 5000]
     df_no_dup.to_csv(f"{nom_desti}.csv", index=False, sep=",")
     return f"{nom_desti}.csv"
 

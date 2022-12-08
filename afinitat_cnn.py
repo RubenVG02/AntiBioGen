@@ -3,6 +3,7 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
+from keras.callbacks import ModelCheckpoint
 
 dades = neteja_dades_afinitat()
 
@@ -10,7 +11,7 @@ arx = pd.read_csv(dades, sep=",")
 
 
 # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
-maxim_smiles = 140
+maxim_smiles = 100
 elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', 'K', 'n', 'B', 'F', '4', '+', ']', '-', '1', 'P',
                    '0', 'L', '%', 'g', '9', 'Z', '(', 'N', '8', 'I', '7', '5', 'l', ')', 'A', 'e', 'o', 'V', 's', 'S', '2', 'M', 'T', 'u', 'i']
 # elements_smiles fa referencia a els elements pels quals es poden formar els smiles
@@ -35,15 +36,21 @@ def convertir(arx=arx):
     smiles_amb_numeros = []  # Smiles obtinguts amb int_smiles[1] i els smiles del df
     for i in arx.smiles:
         for elements in i:  # Elements fa referència a els elements que formen elements_smile
-            smiles_amb_numeros.append(int_smiles[elements])
+            try:
+                smiles_amb_numeros.append(int_smiles[elements])
+            except:
+                pass
         while len(i) < maxim_smiles:
             smiles_amb_numeros.append(0)
 
     fasta_amb_numeros = []
     for i in arx.sequence:
         for elements in i:  # Elements fa referència a els elements que formen elements_smile
-            fasta_amb_numeros.append(int_fasta[elements])
-        while len(i) < maxim_smiles:
+            try:
+                fasta_amb_numeros.append(int_fasta[elements])
+            except:
+                pass
+        while len(i) < maxim_fasta:
             fasta_amb_numeros.append(0)
 
     ic50_numeros = list(arx.IC50)
@@ -104,22 +111,34 @@ def model_cnn():
     modelo.compile(optimizer="adam", loss="mse",
                    metrics=tf.keras.metrics.MeanSquaredError())
 
-    tamany_per_epoch = 5000  # Utilitzem un valor elevat per poder obtenir millors resultats
+    #############
+    save_model_path = "affinity-best.hdf5"
+    checkpoint = ModelCheckpoint(save_model_path,
+                                 monitor='val_loss',
+                                 verbose=1,
+                                 save_best_only=True)
+
+    tamany_per_epoch = 3000  # Utilitzem un valor elevat per poder obtenir millors resultats
     # utilizarem el 80/20 per entrenar y fer test al nostre model
     training = len(arx)*0.8
 
-    train = arx[:int(training)]
-    test = arx[int(training):]
+    train = arx[:20000]
+    test = arx[20000:]
     final = tamany_per_epoch
-    for i in range(20):  # utilitzarem 20 epochs
-        while tamany_per_epoch < len(arx):
+    volta = 1
+    for i in range(5):  # utilitzarem 20 epochs
+
+        print(f"Començant el epoch {volta}")
+        while final < len(arx):
             X_smiles, X_fasta, T_IC50 = convertir(arx[0:final])
-            X_smiles_test, X_fasta_test, T_IC50_test = convertir(test)
+            X_test_smile, X_test_fasta, T_test_IC50 = convertir(test)
 
             r = modelo.fit({X_smiles, X_fasta}, {"output": np.array(T_IC50)},
-                           validation_data=(X_smiles_test, X_fasta_test), epochs=1, batch_size=64)
+                           validation_data={'smiles_input': np.array(X_test_smile),
+                                            'fasta_input': np.array(X_test_fasta)}, epochs=1, batch_size=64, callbacks=[checkpoint])
 
         final += tamany_per_epoch
+        volta += 1
 
     plt.plot(r.history["loss"], label="loss")
     plt.plot(r.history["val_loss"], label="val_loss")
