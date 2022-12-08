@@ -22,7 +22,7 @@ elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', '
 int_smiles = dict(zip(elements_smiles, range(1, len(elements_smiles)+1)))
 # Per associar tots els elements amb un int determinat
 
-maxim_fasta = 5000
+maxim_fasta = 4000
 elements_fasta = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
                   'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']  # Format pels diferents aa que formen els fasta
 
@@ -110,7 +110,7 @@ def model_cnn():
     # dense
 
     de = tf.keras.layers.Dense(units=1024, activation="relu",)(junt)
-    dr = tf.keras.layers.Dropout(0.2)(de)
+    dr = tf.keras.layers.Dropout(0.1)(de)
     de2 = tf.keras.layers.Dense(units=512, activation="relu")(dr)
 
     # output
