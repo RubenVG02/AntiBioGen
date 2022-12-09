@@ -43,18 +43,22 @@ def neteja_dades_rnn(nom_arx="drugs.csv", nom_arx2="dades_netes"):
     print(df2.value_counts())
 
 
-def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
+def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
     ''' 
         Paràmetres:
          -nom_arx: Nom de l'arxiu d'origen a modificar, en format tsv
          -nom_destí: Nom de l'arxiu de destí que es crearà
+         -col_smiles: Columnes a partir de les quals es volen obtenir els smiles
+         -col_ic50: Columnes a partir de les quals es volen obtenir els ic50
+         -col_seq: Columnes a partir de les quals es volen obtenir les seqüencies
 
     '''
     with open(f"{nom_arx}.tsv", "r", encoding="utf8") as file:
-        df = pd.read_csv(file, sep="\t", on_bad_lines="skip", low_memory=False)
+        df = pd.read_csv(file, sep="\t", on_bad_lines="skip",
+                         low_memory=False, nrows=1000000)
         columna_cadena = df["BindingDB Target Chain  Sequence"]
-        columna_50 = df["IC50 (nM)"]
-        columna_smiles = df["Ligand SMILES"]
+        columna_50 = df[col_ic50]
+        columna_smiles = df[col_smiles]
 
     cadena = []
     for i in columna_cadena:
@@ -99,4 +103,5 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat"):
 #selecció = seleccio_mol("CHEMBL6137", nom_df="datafr")
 
 
-neteja_dades_afinitat()
+neteja_dades_afinitat(nom_arx="BindingDB_All",
+                      nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
