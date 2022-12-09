@@ -37,10 +37,26 @@ def neteja_dades_rnn(nom_arx="drugs.csv", nom_arx2="dades_netes"):
     df2 = df2[df2["Standard_Value"] <= 1000000]
     df2 = df2[df2["Standard_Value"] > 0]
     df2 = df2.reset_index(drop=True)
-    df2.to_csv(f"{nom_arx2}.csv", index=False, sep=";")
+    # Aquest és l'arxiu amb tota la info
+    df2.to_csv(f"{nom_arx2}.csv", index=False, sep=",")
 
     # Quants elements utilitzes per entrenar el model
     print(df2.value_counts())
+
+    return f"{nom_arx2}.csv"
+
+
+def obtenir_smiles(arx_origen="dades_netes_antiguo_20k", arx_desti_txt="smiles"):
+    '''
+        Paràmetres:
+        -arx_origen: arxiu a partir del qual obtindrem els smiles
+        -arx_desti_txt: arxiu on es guardaran els smiles
+    '''
+    dades = pd.read_csv(f"{arx_origen}.csv", sep=";")
+    llista_smiles = dades["Smiles"].unique()
+    with open(f"{arx_desti_txt}.txt", "w") as f:
+        for line in llista_smiles:
+            f.write(line + "\n")
 
 
 def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
@@ -78,7 +94,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
         write.writerows(zip(*listas))
 
     arx = pd.read_csv(f"{nom_desti}.csv", sep=",")
-    arx["IC50"].str.strip()
+    arx["IC50"] = arx["IC50"].str.strip()
     arx = arx.dropna(how="any").reset_index(drop=True)
     # print(datfr)
     df_no_dup = arx.drop_duplicates(['smiles'])
@@ -103,5 +119,5 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 #selecció = seleccio_mol("CHEMBL6137", nom_df="datafr")
 
 
-neteja_dades_afinitat(nom_arx="BindingDB_All",
-                      nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
+#neteja_dades_afinitat(nom_arx="BindingDB_All",nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
+obtenir_smiles()

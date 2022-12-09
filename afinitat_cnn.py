@@ -81,7 +81,6 @@ def model_cnn():
         shape=(maxim_smiles,), dtype='int32', name='smiles_input')
     embed = tf.keras.layers.Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
-    x = tf.keras.layers.BatchNormalization()(embed)
     x = tf.keras.layers.Conv1D(
         filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles))(embed)
     x = tf.keras.layers.PReLU()(x)
@@ -98,10 +97,9 @@ def model_cnn():
     fasta_input = tf.keras.Input(shape=(maxim_fasta,), name='fasta_input')
     embed2 = tf.keras.layers.Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
-    x2 = tf.keras.layers.BatchNormalization()(embed2)
     x2 = tf.keras.layers.Conv1D(
         filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta))(embed2)
-    x2 = tf.keras.layers.PReLU()(x2)
+    x2 = tf.keras.layers.PReLU()(embed2)
 
     x2 = tf.keras.layers.Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
@@ -142,28 +140,28 @@ def model_cnn():
                    loss={'output': "mean_squared_logarithmic_error"},
                    metrics={'output': r2_score})
     # s
-    save_model_path = "model.hdf5"
+    save_model_path = "model_1.hdf5"
     checkpoint = ModelCheckpoint(save_model_path,
                                  monitor='val_loss',
                                  verbose=1,
                                  save_best_only=True)
 
     # Utilitzem un valor elevat per poder obtenir millors resultats
-    tamany_per_epoch = 50000
+    tamany_per_epoch = 50700
     # utilizarem el 80/20 per entrenar y fer test al nostre model
     # training = len(arx)*0.8
 
-    train = arx[:350000]
+    train = arx[:355000]
     loss = []
     loss_validades = []
-    epochs = 50
+    epochs = 10
 
     for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0
         final = tamany_per_epoch
         print(f"Començant el epoch {epoch+1}")
 
-        while final < 350000:
+        while final < 355000:
             X_smiles, X_fasta, y_train = convertir(train[inici:final])
 
             r = modelo.fit({'smiles_input': np.array(X_smiles),
