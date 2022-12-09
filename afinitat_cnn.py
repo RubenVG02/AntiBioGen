@@ -82,8 +82,9 @@ def model_cnn():
     embed = tf.keras.layers.Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
     x = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_smiles), activity_regularizer=regulador, kernel_regularizer=regulador)(embed)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles), kernel_initializer='he_normal')(embed)
     x = tf.keras.layers.PReLU()(x)
+    x = tf.keras.layers.Dropout(0.15)(x)
     x = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
     x = tf.keras.layers.PReLU()(x)
     x = tf.keras.layers.Conv1D(
@@ -97,8 +98,9 @@ def model_cnn():
     embed2 = tf.keras.layers.Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
     x2 = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(5000, maxim_fasta), activity_regularizer=regulador, kernel_regularizer=regulador)(embed2)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta), kernel_initializer='he_normal')(embed2)
     x2 = tf.keras.layers.PReLU()(x2)
+    x2 = tf.keras.layers.Dropout(0.15)(x2)
     x2 = tf.keras.layers.Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
     x2 = tf.keras.layers.PReLU()(x2)
@@ -112,7 +114,7 @@ def model_cnn():
 
     # dense
 
-    de = tf.keras.layers.Dense(units=1024, activation="relu",)(junt)
+    de = tf.keras.layers.Dense(units=1024, activation="relu")(junt)
     dr = tf.keras.layers.Dropout(0.1)(de)
     de2 = tf.keras.layers.Dense(units=512, activation="relu")(dr)
 
@@ -133,9 +135,9 @@ def model_cnn():
         SS_res = K.sum(K.square(y_true - y_pred))
         SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
         return (1-SS_res/(SS_tot)+K.epsilon())
-    modelo.compile(optimizer='adam',
-                   # categorical_crossentropy/mean_squared_logarithmic_error
-                   loss={'output': tf.keras.losses.CategoricalCrossentropy()},
+    modelo.compile(optimizer="adam",
+                   # categorical_crossentropy/mean_squared_logarithmic_error/ tf.keras.losses.mean_squared_logarithmic_error
+                   loss={'output': "mean_squared_logarithmic_error"},
                    metrics={'output': r2_score})
     # s
     save_model_path = "model.hdf5"
@@ -143,9 +145,6 @@ def model_cnn():
                                  monitor='val_loss',
                                  verbose=1,
                                  save_best_only=True)
-
-    callback = tf.keras.callbacks.EarlyStopping(
-        monitor='val_loss', patience=15)
 
     # Utilitzem un valor elevat per poder obtenir millors resultats
     tamany_per_epoch = 4000
@@ -168,7 +167,7 @@ def model_cnn():
             r = modelo.fit({'smiles_input': np.array(X_smiles),
                             'fasta_input': np.array(X_fasta)}, {'output': np.array(y_train)},
                            validation_data=({'smiles_input': np.array(X_test_smile),
-                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint, callback], epochs=1, batch_size=64, shuffle=True)
+                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint], epochs=1, batch_size=64, shuffle=True)
 
             inici += tamany_per_epoch
             final += tamany_per_epoch
