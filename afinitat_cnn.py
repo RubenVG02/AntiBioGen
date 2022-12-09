@@ -11,7 +11,7 @@ from keras.regularizers import l2
 # dades = neteja_dades_afinitat()
 
 arx = pd.read_csv(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\cnn_arreglat.csv", sep=",")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\500k_dades.csv", sep=",")
 
 
 # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
@@ -66,7 +66,7 @@ def convertir(arx=arx):
     return smiles_amb_numeros, fasta_amb_numeros, ic50_numeros
 
 
-X_test_smile, X_test_fasta, T_test_IC50 = convertir(arx[20000:])
+X_test_smile, X_test_fasta, T_test_IC50 = convertir(arx[350000:])
 
 
 def model_cnn():
@@ -81,10 +81,11 @@ def model_cnn():
         shape=(maxim_smiles,), dtype='int32', name='smiles_input')
     embed = tf.keras.layers.Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
+    x = tf.keras.layers.BatchNormalization()(embed)
     x = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles), kernel_initializer='he_normal')(embed)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles))(embed)
     x = tf.keras.layers.PReLU()(x)
-    x = tf.keras.layers.Dropout(0.15)(x)
+
     x = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
     x = tf.keras.layers.PReLU()(x)
     x = tf.keras.layers.Conv1D(
@@ -94,13 +95,14 @@ def model_cnn():
         x)  # maxpool per obtenir un vector de 1d
 
     # model per fastas
-    fasta_input = tf.keras.Input(shape=(maxim_fasta,),  name='fasta_input')
+    fasta_input = tf.keras.Input(shape=(maxim_fasta,), name='fasta_input')
     embed2 = tf.keras.layers.Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
+    x2 = tf.keras.layers.BatchNormalization()(embed2)
     x2 = tf.keras.layers.Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta), kernel_initializer='he_normal')(embed2)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta))(embed2)
     x2 = tf.keras.layers.PReLU()(x2)
-    x2 = tf.keras.layers.Dropout(0.15)(x2)
+
     x2 = tf.keras.layers.Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
     x2 = tf.keras.layers.PReLU()(x2)
@@ -147,11 +149,11 @@ def model_cnn():
                                  save_best_only=True)
 
     # Utilitzem un valor elevat per poder obtenir millors resultats
-    tamany_per_epoch = 4000
+    tamany_per_epoch = 50000
     # utilizarem el 80/20 per entrenar y fer test al nostre model
     # training = len(arx)*0.8
 
-    train = arx[:22000]
+    train = arx[:350000]
     loss = []
     loss_validades = []
     epochs = 50
@@ -161,7 +163,7 @@ def model_cnn():
         final = tamany_per_epoch
         print(f"Començant el epoch {epoch+1}")
 
-        while final < 20000:
+        while final < 350000:
             X_smiles, X_fasta, y_train = convertir(train[inici:final])
 
             r = modelo.fit({'smiles_input': np.array(X_smiles),
