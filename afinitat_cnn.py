@@ -6,6 +6,7 @@ import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
 from keras.losses import mean_squared_error
+from keras.layers import Dense, Conv1D, GlobalMaxPooling1D, Embedding, Input, PReLU, Dropout, concatenate, BatchNormalization
 from keras.regularizers import l2
 
 # dades = neteja_dades_afinitat()
@@ -79,48 +80,52 @@ def model_cnn():
     # model per a smiles
     smiles_input = tf.keras.Input(
         shape=(maxim_smiles,), dtype='int32', name='smiles_input')
-    embed = tf.keras.layers.Embedding(input_dim=len(
+    embed = Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
-    x = tf.keras.layers.Conv1D(
+    x = Conv1D(
         filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles))(embed)
-    x = tf.keras.layers.PReLU()(x)
+    x = PReLU()(x)
 
-    x = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
-    x = tf.keras.layers.PReLU()(x)
-    x = tf.keras.layers.Conv1D(
+    x = Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
+    x = BatchNormalization()(x)
+    x = PReLU()(x)
+    x = Conv1D(
         filters=128, kernel_size=3, padding="SAME")(x)
-    x = tf.keras.layers.PReLU()(x)
-    pool = tf.keras.layers.GlobalMaxPooling1D()(
+    x = BatchNormalization()(x)
+    x = PReLU()(x)
+    pool = GlobalMaxPooling1D()(
         x)  # maxpool per obtenir un vector de 1d
 
     # model per fastas
     fasta_input = tf.keras.Input(shape=(maxim_fasta,), name='fasta_input')
-    embed2 = tf.keras.layers.Embedding(input_dim=len(
+    embed2 = Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
-    x2 = tf.keras.layers.Conv1D(
+    x2 = Conv1D(
         filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta))(embed2)
-    x2 = tf.keras.layers.PReLU()(embed2)
+    x2 = PReLU()(embed2)
 
-    x2 = tf.keras.layers.Conv1D(
+    x2 = Conv1D(
         filters=64, kernel_size=3, padding="SAME")(x2)
-    x2 = tf.keras.layers.PReLU()(x2)
-    x2 = tf.keras.layers.Conv1D(
+    x2 = BatchNormalization()(x2)
+    x2 = PReLU()(x2)
+    x2 = Conv1D(
         filters=128, kernel_size=3, padding="SAME")(x2)
-    x2 = tf.keras.layers.PReLU()(x2)
-    pool2 = tf.keras.layers.GlobalMaxPooling1D()(
+    x2 = BatchNormalization()(x2)
+    x2 = PReLU()(x2)
+    pool2 = GlobalMaxPooling1D()(
         x2)  # maxpool per obtenir un vector de 1d
 
-    junt = tf.keras.layers.concatenate(inputs=[pool, pool2])
+    junt = concatenate(inputs=[pool, pool2])
 
     # dense
 
-    de = tf.keras.layers.Dense(units=1024, activation="relu")(junt)
-    dr = tf.keras.layers.Dropout(0.1)(de)
-    de2 = tf.keras.layers.Dense(units=512, activation="relu")(dr)
+    de = Dense(units=1024, activation="relu")(junt)
+    dr = Dropout(0.1)(de)
+    de2 = Dense(units=512, activation="relu")(dr)
 
     # output
 
-    output = tf.keras.layers.Dense(
+    output = Dense(
         1, activation="relu", name="output", kernel_initializer="normal")(de2)
 
     modelo = tf.keras.models.Model(
