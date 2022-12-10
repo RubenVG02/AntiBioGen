@@ -5,6 +5,7 @@ import numpy as np
 from keras.layers import CuDNNLSTM
 from keras.layers import Dropout
 from keras.layers import Dense
+from keras.layers import BatchNormalization
 from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
@@ -35,28 +36,31 @@ dataset = sequences.map(split_input_target)
 dataset = dataset.shuffle(10000).batch(256, drop_remainder=True)
 
 modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
-                                     Dropout(0.2),
+                                     Dropout(0.1),
                                      CuDNNLSTM(256, return_sequences=True),
-                                     Dropout(0.2),
+                                     BatchNormalization(),
+                                     Dropout(0.1),
                                      CuDNNLSTM(512, return_sequences=True),
-                                     Dropout(0.2),
+                                     BatchNormalization(),
+                                     Dropout(0.1),
                                      CuDNNLSTM(256, return_sequences=True),
-                                     Dropout(0.2),
+                                     BatchNormalization(),
+                                     Dropout(0.1),
                                      CuDNNLSTM(128),
-                                     Dropout(0.2),
+                                     Dropout(0.1),
                                      Dense(34, activation="softmax")])
 
 modelo.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
 
-filepath = "model_rnn.hdf5"
+filepath = "model_rnn_2.hdf5"
 checkpoint = ModelCheckpoint(filepath=filepath,
                              monitor='loss',
                              verbose=1,
                              save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
 
-r = modelo.fit(dataset, epochs=50, callbacks=callbacks_list)
+r = modelo.fit(dataset, epochs=200, callbacks=callbacks_list)
 
 plt.plot(r.history["accuracy"], label="acc")
 plt.legend()
