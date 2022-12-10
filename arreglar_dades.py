@@ -18,24 +18,24 @@ def seleccio_mol(id, nom_arx="dades", nom_df="df"):
     return nom_df
 
 
-def neteja_dades_rnn(nom_arx="drugs.csv", nom_arx2="dades_netes"):
+def neteja_dades_rnn(nom_arx="drugs", nom_arx2="dades_netes"):
     ''' 
         Paràmetres:
         -nom_arx: nom arxiu input
         -nom_arx2: nom de l'arxiu net
     '''
-    arx = pd.read_csv(nom_arx, sep=";", index_col=False)
-    datfr = arx[arx.Standard_Value.notna()]
+    arx = pd.read_csv(f"{nom_arx}.csv", sep=";", index_col=False)
+    datfr = arx[arx["Standard Value"].notna()]
     datfr = datfr[arx.Smiles.notna()]
     # print(datfr)
     df_no_dup = datfr.drop_duplicates(['Smiles'])
-    selecc = ['Molecule_ChEMBLID', 'Smiles', 'Standard_Value']
+    selecc = ['Molecule ChEMBL ID', 'Smiles', 'Standard Value']
     df2 = df_no_dup[selecc]
     print(df2.value_counts())
 
     # SV de 1 m, gairebé inactiu, aixo elimina els elements >=1000000
-    df2 = df2[df2["Standard_Value"] <= 1000000]
-    df2 = df2[df2["Standard_Value"] > 0]
+    df2 = df2[df2["Standard Value"] <= 1000000]
+    df2 = df2[df2["Standard Value"] > 0]
     df2 = df2.reset_index(drop=True)
     # Aquest és l'arxiu amb tota la info
     df2.to_csv(f"{nom_arx2}.csv", index=False, sep=",")
@@ -46,13 +46,13 @@ def neteja_dades_rnn(nom_arx="drugs.csv", nom_arx2="dades_netes"):
     return f"{nom_arx2}.csv"
 
 
-def obtenir_smiles(arx_origen="dades_netes_antiguo_20k", arx_desti_txt="smiles"):
+def obtenir_smiles(arx_origen="500k_dades", arx_desti_txt="smiles_22"):
     '''
         Paràmetres:
         -arx_origen: arxiu a partir del qual obtindrem els smiles
         -arx_desti_txt: arxiu on es guardaran els smiles
     '''
-    dades = pd.read_csv(f"{arx_origen}.csv", sep=";")
+    dades = pd.read_csv(f"{arx_origen}.csv", sep=",")
     llista_smiles = dades["Smiles"].unique()
     with open(f"{arx_desti_txt}.txt", "w") as f:
         for line in llista_smiles:
@@ -120,4 +120,5 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 
 
 #neteja_dades_afinitat(nom_arx="BindingDB_All",nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
-obtenir_smiles()
+neteja_dades_rnn(nom_arx="virus+bacterias", nom_arx2="v+b_net")
+obtenir_smiles(arx_origen="v+b_net")
