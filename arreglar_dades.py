@@ -120,5 +120,5 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 
 
 #neteja_dades_afinitat(nom_arx="BindingDB_All",nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
-neteja_dades_rnn(nom_arx="virus+bacterias", nom_arx2="v+b_net")
-obtenir_smiles(arx_origen="v+b_net")
+#neteja_dades_rnn(nom_arx="virus+bacterias", nom_arx2="v+b_net")
+# obtenir_smiles(arx_origen="v+b_net")
