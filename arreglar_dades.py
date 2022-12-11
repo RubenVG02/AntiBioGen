@@ -72,7 +72,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
     with open(f"{nom_arx}.tsv", "r", encoding="utf8") as file:
         df = pd.read_csv(file, sep="\t", on_bad_lines="skip",
                          low_memory=False, nrows=1000000)
-        columna_cadena = df["BindingDB Target Chain  Sequence"]
+        columna_cadena = df[col_seq]
         columna_50 = df[col_ic50]
         columna_smiles = df[col_smiles]
 
