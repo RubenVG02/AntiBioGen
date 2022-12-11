@@ -20,7 +20,16 @@ def split_input_target(chunk):
 
 dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles.txt").read()
 
+# per obtenir els elements unics de dades
 elements_smiles = {u: i for i, u in enumerate(sorted(set(dades)))}
+elements_smiles.update({-1: "\n"})
+
+# per passar els elements unics de dades a
+int_a_elements = {i: u for i, u in enumerate(sorted(set(dades)))}
+elements_smiles.update({-1: "\n"})
+
+mapa_int = len(elements_smiles)
+mapa_char = len(int_a_elements)
 
 max_smile = 137
 
@@ -53,7 +62,7 @@ modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return
 modelo.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
 
-filepath = "model_rnn_2.hdf5"
+filepath = "model_rnn_3_128.hdf5"
 checkpoint = ModelCheckpoint(filepath=filepath,
                              monitor='loss',
                              verbose=1,
@@ -62,6 +71,6 @@ callbacks_list = [checkpoint]
 
 r = modelo.fit(dataset, epochs=200, callbacks=callbacks_list)
 
-plt.plot(r.history["accuracy"], label="acc")
+plt.plot(r.history["accuracy"], label="accuracy")
 plt.legend()
 plt.show()
