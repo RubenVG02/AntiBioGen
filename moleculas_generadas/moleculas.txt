@@ -1,0 +1,11 @@
+NC(=O)C(=O)NCCCC(=O)Nc1ccccc1
+CCCCCCCCCCC1=N\=ccc(Br)c([O+](=O)[O-])c1
+COC(=O)Cn1cnc(N)c1-c1ccc(C(=O)N[C@@H](C)c2ccco2)cc1
+CCCCC1=NN(c2cc
+NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)N1CCCCC1
+CCc1nc2ccccc2CN1C(=O)CCC(=O)NCC1(C)C(=O)CC1
+C[C@H](O)c1ccc(C)c([N+](=O)[
+[C@@H](C)S[C@H](C)C(=O)N1CCN(C(=O)c2ccccc2)CC1
+O=C(NCCSSC@H]1CC=CC1)CC1
+Cc1ccc(C(=O)N(N)c(SS-])c2)c1cccc(C(=O)NCCC(=O)NC(N)(C)C)c1
+C[C@@H
