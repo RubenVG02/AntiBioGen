@@ -69,7 +69,7 @@ checkpoint = ModelCheckpoint(filepath=filepath,
                              save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
 
-r = modelo.fit(dataset, epochs=250, callbacks=callbacks_list, batch_size=128)
+r = modelo.fit(dataset, epochs=200, callbacks=callbacks_list, batch_size=128)
 
 plt.plot(r.history["accuracy"], label="accuracy")
 plt.legend()
