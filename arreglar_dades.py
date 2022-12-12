@@ -53,7 +53,7 @@ def obtenir_smiles(arx_origen="500k_dades", arx_desti_txt="smiles_22"):
         -arx_desti_txt: arxiu on es guardaran els smiles
     '''
     dades = pd.read_csv(f"{arx_origen}.csv", sep=",")
-    llista_smiles = dades["Smiles"].unique()
+    llista_smiles = dades["smiles"].unique()
     with open(f"{arx_desti_txt}.txt", "w") as f:
         for line in llista_smiles:
             f.write(line + "\n")
@@ -104,12 +104,12 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
     df_no_dup = df_no_dup[df_no_dup["smiles"].str.len() < 100]
     df_no_dup = df_no_dup[df_no_dup["sequence"].str.len() < 5000]
     smiles_sense_simbols = []
-    for i in df_no_dup["smiles"]:
+    ''' for i in df_no_dup["smiles"]:
         smiles_sense_simbols.append(i.replace("@", "").replace("\\",
-                                                               "").replace("/", "").replace(".", ""))
+                                                               "").replace("/", "").replace(".", ""))'''
 
-    df_no_dup["smiles"] = smiles_sense_simbols
-    del smiles_sense_simbols
+    '''df_no_dup["smiles"] = smiles_sense_simbols
+    del smiles_sense_simbols'''
     df_no_dup["sequence"] = df_no_dup["sequence"].apply(
         lambda x: x.upper())
     df_no_dup = df_no_dup.sample(frac=1).reset_index(drop=True)
@@ -119,6 +119,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 #selecció = seleccio_mol("CHEMBL6137", nom_df="datafr")
 
 
-#neteja_dades_afinitat(nom_arx="BindingDB_All",nom_desti="500k_dades", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
+neteja_dades_afinitat(nom_arx="inh", nom_desti="500k_dades_amb@", col_smiles="Ligand SMILES",
+                      col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
 #neteja_dades_rnn(nom_arx="virus+bacterias", nom_arx2="v+b_net")
-# obtenir_smiles(arx_origen="v+b_net")
+obtenir_smiles(arx_origen="500k_dades_amb@", arx_desti_txt="a_ver_si_va")
