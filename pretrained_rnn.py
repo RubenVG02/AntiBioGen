@@ -8,7 +8,10 @@ from keras.layers import BatchNormalization
 from keras.callbacks import ModelCheckpoint
 import tensorflow_datasets as tfds
 from rdkit import Chem
+from rdkit.Chem import Descriptors, Lipinski
 import numpy as np
+
+from rdkit.Chem import Draw
 
 
 def split_input_target(chunk):
@@ -21,13 +24,17 @@ def split_input_target(chunk):
 
 dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles.txt").read()
 
+
+prueba = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', 'K', 'n', 'B', 'F', '4', '+', ']', '-', '1', 'P',
+          '0', 'L', '%', 'g', '9', 'Z', '(', 'N', '8', 'I', '7', '5', 'l', ')', 'A', 'e', 'o', 'V', 's', 'S', '2', 'M', 'T', 'u', 'i']
 # per obtenir els elements unics de dades
-elements_smiles = {u: i for i, u in enumerate(sorted(set(dades)))}
+elements_smiles = {u: i for i, u in enumerate(prueba)}
+elements_smiles.update({-1: "\n"})
 
 
 # per passar els elements unics de dades a
 int_a_elements = dict((i, c) for i, c in enumerate(elements_smiles))
-
+int_a_elements.update({"\n": -1})
 
 mapa_int = len(elements_smiles)
 mapa_char = len(int_a_elements)
@@ -81,16 +88,20 @@ for i in range(100):
     molecula = ""
     for i in range(137):
         # predict et dona un float, amb max obtenim la millor predicció
-        predicció = modelo.predict(np.reshape(seed, (1, len(seed), 1)))
+        predicció = modelo.predict(np.reshape(
+            seed, (1, len(seed), 1)), verbose=0)
         index = np.argmax(predicció)
         resultat = int_a_elements[index]
         molecula += resultat
         seed = np.append(seed, np.array([[index]]), axis=0)
         seed = seed[1:len(seed)]
     mol1 = Chem.MolFromSmiles(molecula)
+    print(mol1)
     if mol1 == None:
         print("error")
     else:
         print(molecula)
         print("Ha salido una buena")
+        Draw.MolToImageFile(mol1, filename="molecula22.jpg",
+                            size=(400, 300))
         break
