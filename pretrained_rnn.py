@@ -10,6 +10,9 @@ import tensorflow_datasets as tfds
 from rdkit import Chem
 from rdkit.Chem import Descriptors, Lipinski
 import numpy as np
+import sys
+import random
+import time
 
 from rdkit.Chem import Draw
 
@@ -22,13 +25,12 @@ def split_input_target(chunk):
     return input_text, target
 
 
-dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles.txt").read()
+with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles_chaval.txt") as f:
+    dades = "\n".join(line.strip() for line in f)
 
 
-prueba = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', 'K', 'n', 'B', 'F', '4', '+', ']', '-', '1', 'P',
-          '0', 'L', '%', 'g', '9', 'Z', '(', 'N', '8', 'I', '7', '5', 'l', ')', 'A', 'e', 'o', 'V', 's', 'S', '2', 'M', 'T', 'u', 'i']
 # per obtenir els elements unics de dades
-elements_smiles = {u: i for i, u in enumerate(prueba)}
+elements_smiles = {u: i for i, u in enumerate(sorted(set(dades)))}
 elements_smiles.update({-1: "\n"})
 
 
@@ -73,11 +75,48 @@ def crear_model():
 
 
 modelo = crear_model()
-modelo.load_weights(r"C:\Users\ASUS\Desktop\github22\dasdsd\model_rnn_2.hdf5")
-
+modelo.load_weights(
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\model_rnn_3_128.hdf5")
+modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
 ### Generació de molecules###
+seq_length = 137
+dataX = []
+dataY = []
+for i in range(0, len(dades) - seq_length, 1):
+    seq_in = dades[i:i + seq_length]
+    seq_out = dades[i + seq_length]
+    dataX.append([elements_smiles[char] for char in seq_in])
+    dataY.append(elements_smiles[seq_out])
+pattern = dataX[np.random.randint(0, len(dataX)-1)]
+print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
+final = ""
 for i in range(100):
+    for i in range(137):
+        x = np.reshape(pattern, (1, len(pattern), 1))
+        prediction = modelo.predict(x, verbose=0)
+        index = np.argmax(prediction)
+        result = int_a_elements[index]
+        seq_in = [int_a_elements[value] for value in pattern]
+        sys.stdout.write(result)
+        final += result
+        pattern.append(index)
+        pattern = pattern[1:len(pattern)]
+    print("\nDone.")
+    mol1 = Chem.MolFromSmiles(final)
+    print(mol1)
+    if mol1 == None:
+        print("error")
+    else:
+        print(result)
+        print("Ha salido una buena")
+        Draw.MolToImageFile(mol1, filename=f"molecula{time.time()}.jpg",
+                            size=(400, 300))
+    final = ""
+
+
+'''for i in range(100):
+
 
     network_input = tfds.as_numpy(
         dataset.take(np.random.randint(0, 30000)))
@@ -105,3 +144,4 @@ for i in range(100):
         Draw.MolToImageFile(mol1, filename="molecula22.jpg",
                             size=(400, 300))
         break
+'''
