@@ -121,6 +121,8 @@ def model_cnn():
 
     de = Dense(units=1024, activation="relu")(junt)
     dr = Dropout(0.1)(de)
+    de = Dense(units=1024, activation="relu")(dr)
+    dr = Dropout(0.1)(de)
     de2 = Dense(units=512, activation="relu")(dr)
 
     # output
@@ -159,7 +161,7 @@ def model_cnn():
     train = arx[:355000]
     loss = []
     loss_validades = []
-    epochs = 10
+    epochs = 100
 
     for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0

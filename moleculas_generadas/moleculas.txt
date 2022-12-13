@@ -66,3 +66,12 @@ CCCCC1=ON(Cc2ccc(O(=O)(=O)NCCCC3)cc2)c1ccccc1
 CC[C@@H](COC(=O)NOc1ccc(C)c(C)c2)CCN(Cc1cccs1)C1
 C[C@@H](CCNC(=
 
+C(=O)NCCCC(=O)NCCCC(=O)N1CCCCC1
+CC[C@H](C)Nc1ccc(C(=O)N2CCC(C)(C)C)cc1
+COC(=O)Cn1cnc(N)c1-c1ccc(C(=O)N(C)C)c(C)c1
+CCNC(=O)c1ccccc1NC(=O)c
+
+CCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)N1CCCCC1
+CC[C@H](C)Nc1ccc(COc2ccc(C)c(F)c2F)c1
+COc
+
