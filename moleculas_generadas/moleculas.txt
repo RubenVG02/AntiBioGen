@@ -104,3 +104,9 @@ CCCC1=CN(C(=O)N2CCCCC2)CC1CCCCC1=ON(Cc2ccc(O(=O)(=O)NCCCC3)cc2)c1ccccc1CC[C@@H](
 
 C1CC[NH+](CCC(=O)Nc2ccccc2)CC1Cc1ccc(C(=O)N(C)C(=O)N[C@H](CC(=O)Nc2ccc(F)c
 
+C(C)(C)CCOc1ccccc1CC(=O)N1CCN(C(=O)c2ccccc2)CC1CCN(CCO)C
+
+NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)N1CCCCC1CC[C@H](C)Nc1ccc(COc2ccc(C)c(F)c2F)c1COc1ccc(NC(=O)[C@H](O)[C@H](C)Oc2ccc(OC
+
+N(CCC)NC(=O)NC(C)(C)CCOc1ccccc1CC(=O)N1CCN(C(=O)c2ccccc2)CC1CCN(CCO)C(=O)Nc1cnn(C2CC2)c1CCOC(=O)C1CC[NH+](CCC(=O)Nc2ccccc2)
+

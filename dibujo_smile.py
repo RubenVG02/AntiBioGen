@@ -47,7 +47,7 @@ def mol2seq(m):
     return Chem.MolToSequence(m_renum)
 
 
-smile = "CCCC1=CN(C(=O)N2CCCCC2)CC1CCCCC1=ON(Cc2ccc(O(=O)(=O)NCCCC3)cc2)c1ccccc1CC[C@@H](CO"
+smile = "N(CCC)NC(=O)NC(C)(C)CCOc1ccccc1CC(=O)N1CCN(C(=O)c2ccccc2)CC1CCN(CCO)C(=O)Nc1cnn(C2CC2)c1CCOC(=O)C1CC[NH+](CCC(=O)Nc2ccccc2)"
 m = Chem.MolFromSmiles(smile)
 
 
