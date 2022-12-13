@@ -47,11 +47,9 @@ def mol2seq(m):
     return Chem.MolToSequence(m_renum)
 
 
-smile = "COCCOc1cc2ncc(C#N)c(Nc3cc(OC)c(OC)c(OC)c3)c2cc1OCCOC"
+smile = "CCCC1=CN(C(=O)N2CCCCC2)CC1CCCCC1=ON(Cc2ccc(O(=O)(=O)NCCCC3)cc2)c1ccccc1CC[C@@H](CO"
 m = Chem.MolFromSmiles(smile)
-pdb = rdmol.MolToPDBBlock(m)
-m2 = rdmol.MolFromPDBBlock(pdb)
-fa = rdmol.MolToFASTA(m2)
+
 
 Draw.MolToMPL(m).savefig("molecula.jpg", bbox_inches="tight")
 
