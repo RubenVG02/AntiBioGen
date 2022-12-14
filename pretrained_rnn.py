@@ -17,10 +17,10 @@ import time
 from rdkit.Chem import Draw
 
 
-def split_input_target(chunk):
+def split_input_target(chunk, valors=34):
     input_text = chunk[:-1]
     target_idx = chunk[-1]
-    target = tf.one_hot(target_idx, depth=34)
+    target = tf.one_hot(target_idx, depth=valors)
     target = tf.reshape(target, [-1])
     return input_text, target
 
@@ -51,7 +51,7 @@ char_dataset = tf.data.Dataset.from_tensor_slices(slices)
 
 sequences = char_dataset.batch(137+1, drop_remainder=True)
 
-dataset = sequences.map(split_input_target)
+dataset = sequences.map(split_input_target(valors=mapa_int-1))
 
 dataset = dataset.shuffle(10000).batch(256, drop_remainder=True)
 

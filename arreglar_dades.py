@@ -33,8 +33,7 @@ def neteja_dades_rnn(nom_arx="drugs", nom_arx2="dades_netes"):
     df2 = df_no_dup[selecc]
     print(df2.value_counts())
 
-    # SV de 1 m, gairebé inactiu, aixo elimina els elements >=1000000
-    df2 = df2[df2["Standard Value"] <= 1000000]
+    # SV menors que 0 s'eliminen
     df2 = df2[df2["Standard Value"] > 0]
     df2 = df2.reset_index(drop=True)
     # Aquest és l'arxiu amb tota la info
@@ -53,7 +52,7 @@ def obtenir_smiles(arx_origen="500k_dades", arx_desti_txt="smiles_22"):
         -arx_desti_txt: arxiu on es guardaran els smiles
     '''
     dades = pd.read_csv(f"{arx_origen}.csv", sep=",")
-    llista_smiles = dades["smiles"].unique()
+    llista_smiles = dades["Smiles"].unique()
     with open(f"{arx_desti_txt}.txt", "w") as f:
         for line in llista_smiles:
             f.write(line + "\n")
@@ -119,7 +118,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 #selecció = seleccio_mol("CHEMBL6137", nom_df="datafr")
 
 
-neteja_dades_afinitat(nom_arx="inh", nom_desti="500k_dades_amb@", col_smiles="Ligand SMILES",
-                      col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
-#neteja_dades_rnn(nom_arx="virus+bacterias", nom_arx2="v+b_net")
-obtenir_smiles(arx_origen="500k_dades_amb@", arx_desti_txt="a_ver_si_va")
+#neteja_dades_afinitat(nom_arx="inh", nom_desti="500k_dades_amb@", col_smiles="Ligand SMILES",col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
+#neteja_dades_rnn(nom_arx="parte1", nom_arx2="parte1_csv")
+obtenir_smiles(arx_origen="parte1_csv",
+               arx_desti_txt="parte1_txt")
