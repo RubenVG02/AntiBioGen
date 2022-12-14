@@ -17,15 +17,15 @@ import time
 from rdkit.Chem import Draw
 
 
-def split_input_target(chunk, valors=34):
+def split_input_target(chunk):
     input_text = chunk[:-1]
     target_idx = chunk[-1]
-    target = tf.one_hot(target_idx, depth=valors)
+    target = tf.one_hot(target_idx, depth=51)
     target = tf.reshape(target, [-1])
     return input_text, target
 
 
-with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles_chaval.txt") as f:
+with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt") as f:
     dades = "\n".join(line.strip() for line in f)
 
 
@@ -51,7 +51,7 @@ char_dataset = tf.data.Dataset.from_tensor_slices(slices)
 
 sequences = char_dataset.batch(137+1, drop_remainder=True)
 
-dataset = sequences.map(split_input_target(valors=mapa_int-1))
+dataset = sequences.map(split_input_target)
 
 dataset = dataset.shuffle(10000).batch(256, drop_remainder=True)
 
@@ -70,13 +70,13 @@ def crear_model():
                                          Dropout(0.1),
                                          CuDNNLSTM(128),
                                          Dropout(0.1),
-                                         Dense(34, activation="softmax")])
+                                         Dense(mapa_char-1, activation="softmax")])
     return modelo
 
 
 modelo = crear_model()
 modelo.load_weights(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\model_rnn_3_128.hdf5")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn.hdf5")
 modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
 ### Generació de molecules###
@@ -91,7 +91,7 @@ for i in range(0, len(dades) - seq_length, 1):
 pattern = dataX[np.random.randint(0, len(dataX)-1)]
 print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
 final = ""
-for i in range(40):
+for i in range(100):
     for i in range(random.randrange(50, 137)):
         x = np.reshape(pattern, (1, len(pattern), 1))
         prediction = modelo.predict(x, verbose=0)

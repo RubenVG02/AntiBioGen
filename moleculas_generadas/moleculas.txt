@@ -110,3 +110,9 @@ NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)NCCC(=O)N1CCCCC1CC[C@H](C)Nc1ccc(COc2ccc
 
 N(CCC)NC(=O)NC(C)(C)CCOc1ccccc1CC(=O)N1CCN(C(=O)c2ccccc2)CC1CCN(CCO)C(=O)Nc1cnn(C2CC2)c1CCOC(=O)C1CC[NH+](CCC(=O)Nc2ccccc2)
 
+[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]
+
+C(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)
+
+NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]
+
