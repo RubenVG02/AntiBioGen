@@ -63,7 +63,7 @@ modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return
 
 
 modelo.load_weights(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn.hdf5")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn_con100k.hdf5")
 
 modelo.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
@@ -75,4 +75,4 @@ checkpoint = ModelCheckpoint(filepath=filepath,
                              save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
 
-r = modelo.fit(dataset, epochs=150, callbacks=callbacks_list, batch_size=128)
+r = modelo.fit(dataset, epochs=100, callbacks=callbacks_list, batch_size=128)

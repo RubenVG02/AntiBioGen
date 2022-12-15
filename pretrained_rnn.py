@@ -20,7 +20,7 @@ from rdkit.Chem import Draw
 def split_input_target(chunk):
     input_text = chunk[:-1]
     target_idx = chunk[-1]
-    target = tf.one_hot(target_idx, depth=51)
+    target = tf.one_hot(target_idx, depth=50)
     target = tf.reshape(target, [-1])
     return input_text, target
 
@@ -70,7 +70,7 @@ def crear_model():
                                          Dropout(0.1),
                                          CuDNNLSTM(128),
                                          Dropout(0.1),
-                                         Dense(mapa_char-1, activation="softmax")])
+                                         Dense(mapa_char-2, activation="softmax")])
     return modelo
 
 
@@ -91,8 +91,8 @@ for i in range(0, len(dades) - seq_length, 1):
 pattern = dataX[np.random.randint(0, len(dataX)-1)]
 print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
 final = ""
-for i in range(30):
-    for i in range(random.randrange(50, 137)):
+for i in range(40):
+    for i in range(random.randrange(100, 137)):
         x = np.reshape(pattern, (1, len(pattern), 1))
         prediction = modelo.predict(x, verbose=0)
         index = np.argmax(prediction)
