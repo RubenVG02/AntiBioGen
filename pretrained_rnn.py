@@ -91,7 +91,7 @@ for i in range(0, len(dades) - seq_length, 1):
 pattern = dataX[np.random.randint(0, len(dataX)-1)]
 print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
 final = ""
-for i in range(40):
+for i in range(100):
     for i in range(random.randrange(100, 137)):
         x = np.reshape(pattern, (1, len(pattern), 1))
         prediction = modelo.predict(x, verbose=0)
