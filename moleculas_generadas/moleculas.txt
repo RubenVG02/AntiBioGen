@@ -116,3 +116,5 @@ C(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=
 
 NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H]
 
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC(=O)O[C@@H]1[C@@H](O)[C@H](O)[C@H](O)[C@H]1OCc1cc(O)cc(Cn)c1-c1ccc(OCc2ccc(Cl)cc2)cc1CC(=O)N
+
