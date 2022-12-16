@@ -10,7 +10,7 @@ from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
 
-dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt").read()
+dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles_chaval.txt").read()
 
 # per obtenir els elements unics de dades a numeros enters mitjançant un diccionari
 # així associem un valor numeric a cada lletra
@@ -68,7 +68,7 @@ modelo.load_weights(
 modelo.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
 
-filepath = "modelo_prueba_rnn_con100k.hdf5"
+filepath = "modelo_prueba_rnn_aversiva.hdf5"
 checkpoint = ModelCheckpoint(filepath=filepath,
                              monitor='loss',
                              verbose=1,

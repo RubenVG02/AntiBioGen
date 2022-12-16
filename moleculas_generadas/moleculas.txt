@@ -196,3 +196,13 @@ C(C)CNC(=O)C(Cc1ccccc1)C(=O)OCCOC(=O)c1ccc(C)cc1-c1ccc(N2CCN(c3ccccc3)CC2)cc1CC(
 
 C(=O)OC.O=C(O)C(F)(F)FO=C(O)CNC(=O)CNC(=O)CNC(=O)c1c
 
+[C@H]1CCC[C@@H](C)C1(C)CCCc1nn(-c2ccccc2)c(C)c1CCC(=O)N
+
+Cc1ccccc1CCCCCCCCC(=O)N/N=C/c1ccc(Br)cc1Cc1ccccc1OCC(=O)N(C)C
+
+CC[NH+]1CCOCC1Cc1ccccc1OC1C[C@H](C(=O)[O-])CCCC1Cc1ccccc1OC1C[C@H](C(=O)[O-])CCCC1Cc1ccccc1OC1C[C@H](C(
+
+C[C@H](O)c1cccc(C(=O)N[C@H](C)c2ccc(Cl)cc2)c1Cc1cccc(OCC(=O)N(Cc2ccc(C)cc2)c2ccccc2)c1CCCCCCCCC(=O)N(C)CCCCCCCCCCCCCCCCCCCCCC
+
+c1ccccc1N1C[C@@H](C(=O)NNC(=O)c2ccc(N3CCC(C)(CCCO)CC3)cc2)CC(=O)N(c2ccccc2)C1CCCOC[C@H](O)[C@@H](C)OC(=O)c1cccc
+
