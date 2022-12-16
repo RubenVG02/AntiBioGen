@@ -25,7 +25,7 @@ def split_input_target(chunk):
     return input_text, target
 
 
-with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt") as f:
+with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles_chaval.txt") as f:
     dades = "\n".join(line.strip() for line in f)
 
 

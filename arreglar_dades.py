@@ -119,6 +119,6 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 
 
 #neteja_dades_afinitat(nom_arx="inh", nom_desti="500k_dades_amb@", col_smiles="Ligand SMILES",col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
-#neteja_dades_rnn(nom_arx="parte1", nom_arx2="parte1_csv")
-obtenir_smiles(arx_origen="parte1_csv",
-               arx_desti_txt="parte1_txt")
+neteja_dades_rnn(nom_arx="parte2", nom_arx2="parte2_csv")
+obtenir_smiles(arx_origen="parte2_csv",
+               arx_desti_txt="parte2_txt")
