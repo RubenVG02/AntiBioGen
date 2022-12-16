@@ -244,3 +244,13 @@ N1CCC(NC(=O)N[C@H]2C[C@H](c3ccccc3)C2)CC1O=C(Nc1ccc(Cl)
 
 CC(=O)NCCC1(c2ccccc2)CCCC1Cc1ccccc1N1C[C@@H](C(=O)NNC(=O)c2ccc(N3CCC(C)(CCCO)CC3)cc2)CC(=O)N(Cc2ccccc2)C1CCNC(=O)[C@@H]1CC
 
+[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)
+
+N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C
+
+CCCCCCCCCCCCCCCCCCCCCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOCCOC
+
+COc1cc(-c2cc(OC)c(OC)c(OC)c2)cc(-c2ccccc2)c1-c1ccccc1COc1ccc(-c2cc(-c3ccccc3)cc(C(=O)Nc3ccccc3)nn2)cc1CC(C)c1ccc(C(=O)N2C
+
+N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)
+
