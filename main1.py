@@ -1,6 +1,6 @@
 dades = open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt").read()
 dades2 = open(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\smiles_chaval.txt").read()
+    r"C:\Users\ASUS\Desktop\github22\dasdsd/prueba/xaa.txt").read()
 
 print(list(set(dades)-set(dades2)))
 
