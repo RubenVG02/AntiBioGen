@@ -25,7 +25,7 @@ def split_input_target(chunk):
     return input_text, target
 
 
-with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\prueba/xaa.txt") as f:
+with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt") as f:
     dades = "\n".join(line.strip() for line in f)
 
 
@@ -35,7 +35,7 @@ elements_smiles.update({-1: "\n"})
 
 
 # per passar els elements unics de dades a
-int_a_elements = dict((i, c) for i, c in enumerate(elements_smiles))
+int_a_elements = {i: c for i, c in enumerate(elements_smiles)}
 int_a_elements.update({"\n": -1})
 
 mapa_int = len(elements_smiles)
@@ -102,18 +102,20 @@ for i in range(100):
         final += result
         pattern.append(index)
         pattern = pattern[1:len(pattern)]
-    print("\nDone.")
-    mol1 = Chem.MolFromSmiles(final)
-    print(mol1)
-    if mol1 == None:
-        print("error")
-    elif not mol1 == None:
-        print(result)
-        print("Ha salido una buena")
-        Draw.MolToImageFile(
-            mol1, filename=f"moleculas_generadas/molecula{int(time.time())}.jpg", size=(400, 300))
-        with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas/moleculas.txt", "a") as file:
-            file.write(final.replace("\n", "") + "\n" + "\n")
+    final = final.split("\n")
+    for i in final:
+        mol1 = Chem.MolFromSmiles(i)
+        if mol1 == None:
+            print("error")
+        elif not mol1 == None:
+            print(result)
+            print("Ha salido una buena, miro si es drug-like")
+            if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:
+                Draw.MolToImageFile(
+                    mol1, filename=f"moleculas_generadas/molecula{int(time.time())}.jpg", size=(400, 300))
+                with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas/moleculas_drugl.txt", "a") as file:
+                    file.write(i + "\n")
+                print("La molecula es drug-like")
     final = ""
 
 
