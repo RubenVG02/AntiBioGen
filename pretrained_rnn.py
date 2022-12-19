@@ -76,7 +76,7 @@ def crear_model():
 
 modelo = crear_model()
 modelo.load_weights(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_rnn_basesprueba1.hdf5")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn_con100k.hdf5")
 modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
 ### Generació de molecules###
