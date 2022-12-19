@@ -120,9 +120,9 @@ def model_cnn():
     # dense
 
     de = Dense(units=1024, activation="relu")(junt)
-    dr = Dropout(0.1)(de)
+    dr = Dropout(0.3)(de)
     de = Dense(units=1024, activation="relu")(dr)
-    dr = Dropout(0.1)(de)
+    dr = Dropout(0.3)(de)
     de2 = Dense(units=512, activation="relu")(dr)
 
     # output
@@ -142,12 +142,15 @@ def model_cnn():
         SS_res = K.sum(K.square(y_true - y_pred))
         SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
         return (1-SS_res/(SS_tot)+K.epsilon())
+
+    modelo.load_weights(
+        r"C:\Users\ASUS\Desktop\github22\dasdsd\model_prueba_cnn.hdf5")
     modelo.compile(optimizer="adam",
                    # categorical_crossentropy/mean_squared_logarithmic_error/ tf.keras.losses.mean_squared_logarithmic_error
                    loss={'output': "mean_squared_logarithmic_error"},
                    metrics={'output': r2_score})
     # s
-    save_model_path = "model_1.hdf5"
+    save_model_path = "model_prueba_cnn.hdf5"
     checkpoint = ModelCheckpoint(save_model_path,
                                  monitor='val_loss',
                                  verbose=1,
@@ -161,7 +164,7 @@ def model_cnn():
     train = arx[:355000]
     loss = []
     loss_validades = []
-    epochs = 100
+    epochs = 50
 
     for epoch in range(epochs):  # Quantitat d'epochs que vols utilitzar
         inici = 0
