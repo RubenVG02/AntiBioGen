@@ -156,8 +156,8 @@ def model_cnn():
     while (len(fasta_in) != 4000):
         fasta_in.append(0)
 
-    predecir=modelo.predict({'smiles_input': np.array(smiles_in).reshape(1, 137,),
-                          'fasta_input': np.array(fasta_in).reshape(1, 4000,)})[0][0]
+    predecir = modelo.predict({'smiles_input': np.array(smiles_in).reshape(1, 137,),
+                               'fasta_input': np.array(fasta_in).reshape(1, 4000,)})[0][0]
     idx = 0
     compound = arx[355500:].iloc[idx].smiles
     protein = arx[355500:].iloc[idx].sequence
@@ -165,9 +165,7 @@ def model_cnn():
     print(protein)
     print(predecir(compound, protein))
     print(arx[355500:].iloc[idx].IC50)
-    
 
-   
     '''modelo.compile(optimizer="adam",
                    # categorical_crossentropy/mean_squared_logarithmic_error/ tf.keras.losses.mean_squared_logarithmic_error
                    loss={'output': "mean_squared_logarithmic_error"},

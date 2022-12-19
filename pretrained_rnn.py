@@ -25,7 +25,7 @@ def split_input_target(chunk):
     return input_text, target
 
 
-with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt") as f:
+with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\prueba/xaa.txt") as f:
     dades = "\n".join(line.strip() for line in f)
 
 
@@ -76,7 +76,7 @@ def crear_model():
 
 modelo = crear_model()
 modelo.load_weights(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn_con100k.hdf5")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn_aversiva.hdf5")
 modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
 ### Generació de molecules###
@@ -92,7 +92,7 @@ pattern = dataX[np.random.randint(0, len(dataX)-1)]
 print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
 final = ""
 for i in range(50):
-    for i in range(random.randrange(50, 137)):
+    for i in range(random.randrange(100, 137)):
         x = np.reshape(pattern, (1, len(pattern), 1))
         prediction = modelo.predict(x, verbose=0)
         index = np.argmax(prediction)
