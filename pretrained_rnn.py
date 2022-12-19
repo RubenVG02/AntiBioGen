@@ -76,7 +76,7 @@ def crear_model():
 
 modelo = crear_model()
 modelo.load_weights(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_prueba_rnn_aversiva.hdf5")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\modelo_rnn_basesprueba1.hdf5")
 modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
 ### Generació de molecules###
@@ -91,8 +91,8 @@ for i in range(0, len(dades) - seq_length, 1):
 pattern = dataX[np.random.randint(0, len(dataX)-1)]
 print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
 final = ""
-for i in range(100):
-    for i in range(random.randrange(50, 137)):
+for i in range(50):
+    for i in range(random.randrange(100, 137)):
         x = np.reshape(pattern, (1, len(pattern), 1))
         prediction = modelo.predict(x, verbose=0)
         index = np.argmax(prediction)
@@ -105,17 +105,20 @@ for i in range(100):
     final = final.split("\n")
     for i in final:
         mol1 = Chem.MolFromSmiles(i)
-        if mol1 == None:
-            print("error")
-        elif not mol1 == None:
-            print(result)
-            print("Ha salido una buena, miro si es drug-like")
-            if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:
-                Draw.MolToImageFile(
-                    mol1, filename=f"moleculas_generadas/molecula{int(time.time())}.jpg", size=(400, 300))
-                with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas/moleculas_drugl.txt", "a") as file:
-                    file.write(i + "\n")
-                print("La molecula es drug-like")
+        if len(i) > 10:
+            if mol1 == None:
+                print("error")
+            elif not mol1 == None:
+                print(result)
+                print("Ha salido una buena, miro si es drug-like")
+                if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:
+                    Draw.MolToImageFile(
+                        mol1, filename=f"moleculas_generadas/moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
+                    with open(r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike.txt", "a") as file:
+                        file.write(i + "\n")
+                    print("La molecula es drug-like")
+        else:
+            pass
     final = ""
 
 
