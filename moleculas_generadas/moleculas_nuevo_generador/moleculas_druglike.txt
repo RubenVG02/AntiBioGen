@@ -38,3 +38,17 @@ CCC(=O)NCCCCC1(c2ccccc2)CCCC1
 Cc1ccc(N2CCN(c3ncccn3)c3ccc(Cl)cc3)CC12
 Cc1ccc(N2C(=O)CCC2=O)cc1
 O=C(Nc1ccc(Cl)cc1)N1CCC(NC(=O)c2ccc3c(c2)OCO3)CC1
+CC(C)CSC(=S)N/N=C(\C)NC(=O)[C@@H](N)Cc1ccc(O)cc1
+O=C(N[C@@H](Cc1c[nH]cn1)c1ccccc1)C(=O)OCc1ccccc1
+O=C(/C=C/c1ccc(Cl)cc1)
+Nc1ncc(Cl)cc1Cl
+N#Cc1ccc2ccccc2c1-c1ccccc1
+O=C(Nc1ccccc1)c1ccc2c(c1)CCCCN2
+Cc1ccc(S(=O)(=O)N2CCN(c3ccc(Cl)cc3)CC2)cc1
+CC(C)CCNC(=O)C(Cc1ccccc1)C(=O)OCc1ccccc1
+COc1cc(-c2ccccc2)c(-c2ccc(O)c(O)c2)cc1O
+Nc1nc(Nc2ccccc2F)c2ccc(F)cc2n1
+N#Cc1ccc2ccccc2c1-c1ccccc1
+C[C@H](NC(=O)[C@@H](N)Cc1ccc(O)cc1)C(=O)N
+Cc1ccc(S(=O)(=O)N2CCN(c3ccc(Cl)cc3)CC2)cc1
+O=C(/C=C/c1ccc(Cl)cc1)Nc1ncc(Cl)cc1Cl
