@@ -12,7 +12,7 @@ from keras.regularizers import l2
 # dades = neteja_dades_afinitat()
 
 arx = pd.read_csv(
-    r"C:\Users\ASUS\Desktop\github22\dasdsd\500k_dades.csv", sep=",")
+    r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv", sep=",")
 
 
 # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
@@ -144,7 +144,7 @@ def model_cnn():
         return (1-SS_res/(SS_tot)+K.epsilon())
 
     modelo.load_weights(
-        r"C:\Users\ASUS\Desktop\github22\dasdsd\model_prueba_cnn.hdf5")
+        r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\model_prueba_cnn.hdf5")
     modelo.compile(optimizer="adam",
                    # categorical_crossentropy/mean_squared_logarithmic_error/ tf.keras.losses.mean_squared_logarithmic_error
                    loss={'output': "mean_squared_logarithmic_error"},
