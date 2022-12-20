@@ -21,19 +21,19 @@ import csv
 from mega import Mega
 
 
-target = "MLSTQFNRDNQYQAITKPSLLAGCIALALLPSAAFAAPATEETVIVEGSATAPDDGENDYSVTSTSAGTKMQMTQRDIPQSVTIVSQQRMEDQQLQTLGEVMENTLGISKSQADSDRALYYSRGFQIDNYMVDGIPTYFESRWNLGDALSDMALFERVEVVRGATGLMTGTGNPSAAINMVRKHATSREFKGDVSAEYGSWNKERYVADLQSPLTEDGKIRARIVGGYQNNDSWLDRYNSEKTFFSGIVDADLGDLTTLSAGYEYQRIDVNSPTWGGLPRWNTDGSSNSYDRARSTAPDWAYNDKEINKVFMTLKQQFADTWQATLNATHSEVEFDSKMMYVDAYVNKADGMLVGPYSNYGPGFDYVGGTGWNSGKRKVDALDLFADGSYELFGRQHNLMFGGSYSKQNNRYFSSWANIFPDEIGSFYNFNGNFPQTDWSPQSLAQDDTTHMKSLYAATRVTLADPLHLILGARYTNWRVDTLTYSMEKNHTTPYAGLVFDINDNWSTYASYTSIFQPQNDRDSSGKYLAPITGNNYELGLKSDWMNSRLTTTLAIFRIEQDNVAQSTGTPIPGSNGETAYKAVDGTVSKGVEFELNGAITDNWQLTFGATRYIAEDNEGNAVNPNLPRTTVKMFTSYRLPVMPELTVGGGVNWQNRVYTDTVTPYGTFRAEQGSYALVDLFTRYQVTKNFSLQGNVNNLFDKTYDTNVEGSIVYGTPRNFSITGTYQF"
+target = "PEEIRPKEVYLDRKLLTLEDKELGSGNFGTVKKGYYQMKKVVKTVAVKILKNEANDPALKDELLAEANVMQQLDNPYIVRMIGICEAESWMLVMEMAELGPLNKYLQQNRHVKDKNIIELVHQVSMGMKYLEESNFVHRDLAARNVLLVTQHYAKISDFGLSKALRADENYYKAQTHGKWPVKWYAPECINYYKFSSKSDVWSFGVLMWEAFSYGQKPYRGMKGSEVTAMLEKGERMGCPAGCPREMYDLMNLCWTYDVENRPGFAAVELRLRNYYYDVVN"
 
 
-def buscar_candidats(target=target, forma_guardat="csv", nom_arx="resultats_fhue_ecoli", pujar_a_mega=True):
+def buscar_candidats(target=target, forma_guardat="csv", nom_arx="resultats_pibe", pujar_a_mega=True):
     ic50 = []
     smiles = []
     ic50_menor = 100000
     mirar = []
-    while not ic50_menor < 1000:
+    while not ic50_menor < 100:
         generats = generador(nombre_generats=10, img_druglike=False)
         smiles.extend(generats)
         for i in generats:
-            i = i.replace("@", "")
+            i = i.replace("@", "").replace("/", "")
             try:
                 predicció_ic50 = mesurador_afinitat(smile=i, fasta=target)
                 ic50.append(predicció_ic50)
@@ -45,10 +45,10 @@ def buscar_candidats(target=target, forma_guardat="csv", nom_arx="resultats_fhue
         with open(f"{nom_arx}.csv", "w") as file:
             writer = csv.writer(file)
             writer.writerows(zip(smiles, ic50))
-    if pujar_a_mega == True:
+    '''if pujar_a_mega == True:
         compte = Mega.login_anonymous()
         pujada = compte.upload(f"{nom_arx}.csv")
-        compte.get_upload_like(pujada)
+        compte.get_upload_like(pujada)'''
 
 
 buscar_candidats()
