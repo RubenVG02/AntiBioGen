@@ -4,10 +4,7 @@ from rdkit.Chem import Draw
 from IPython.display import SVG
 
 
-smile = '''(=O)NC1CCCCCC1
-CC[C@H](C(=O)N[C@@H](C)c1ccc(-c2ccccc2)n1)c1ccccc1
-CCn1cnnn1CNC(=O)c1ccc(-n2nc3sc3c(c2)OCO3)SC@H](O)C1
-O=C(Nc1nc2ccc(Cl)c'''
+smile = "CCc1nc(NC(=O)N2CCN(C(=O)[C@@H]3CCC[C@@H]3C)CC2)ccc1OC"
 
 molecula = Chem.MolFromSmiles(smile)
 Draw.MolToImageFile(molecula, filename="molecula22.jpg",

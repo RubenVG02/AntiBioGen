@@ -21,14 +21,21 @@ import csv
 from mega import Mega
 
 
-target = "PEEIRPKEVYLDRKLLTLEDKELGSGNFGTVKKGYYQMKKVVKTVAVKILKNEANDPALKDELLAEANVMQQLDNPYIVRMIGICEAESWMLVMEMAELGPLNKYLQQNRHVKDKNIIELVHQVSMGMKYLEESNFVHRDLAARNVLLVTQHYAKISDFGLSKALRADENYYKAQTHGKWPVKWYAPECINYYKFSSKSDVWSFGVLMWEAFSYGQKPYRGMKGSEVTAMLEKGERMGCPAGCPREMYDLMNLCWTYDVENRPGFAAVELRLRNYYYDVVN"
+target = "MAQTQGTKRKVCYYYDGDVGNYYYGQGHPMKPHRIRMTHNLLLNYGLYRKMEIYRPHKANAEEMTKYHSDDYIKFLRSIRPDNMSEYSKQMQRFNVGEDCPVFDGLFEFCQLSTGGSVASAVKLNKQQTDIAVNWAGGLHHAKKSEASGFCYVNDIVLAILELLKYHQRVLYIDIDIHHGDGVEEAFYTTDRVMTVSFHKYGEYFPGTGDLRDIGAGKGKYYAVNYPLRDGIDDESYEAIFKPVMSKVMEMFQPSAVVLQCGSDSLSGDRLGCFNLTIKGHAKCVEFVKSFNLPMLMLGGGGYTIRNVARCWTYETAVALDTEIPNELPYNDYFEYFGPDFKLHISPSNMTNQNTNEYLEKIKQRLFENLRMLPHAPGVQMQAIPEDAIPEESGDEDEEDPDKRISICSSDKRIACEEEFSDSDEEGEGGRKNSSNFKKAKRVKTEDEKEKDPEEKKEVTEEEKTKEEKPEAKGVKEEVKLA"
 
 
-def buscar_candidats(target=target, forma_guardat="csv", nom_arx="resultats_pibe", pujar_a_mega=True):
+def crear_arxiu(nom_arxiu, headers=["smiles", "IC50"]):
+    with open(f"{nom_arxiu}.csv", "w") as file:
+        writer = csv.writer(file)
+        writer.writerow(headers)
+
+
+def buscar_candidats(target=target, forma_guardat="csv", nom_arx="prueba_tio", pujar_a_mega=True):
     ic50 = []
     smiles = []
     ic50_menor = 100000
     mirar = []
+    crear_arxiu(nom_arxiu=nom_arx)
     while not ic50_menor < 100:
         generats = generador(nombre_generats=10, img_druglike=False)
         smiles.extend(generats)
@@ -40,11 +47,14 @@ def buscar_candidats(target=target, forma_guardat="csv", nom_arx="resultats_pibe
                 mirar.append(predicció_ic50)
             except:
                 ic50.append("error")
-        headers = ["smiles", "IC50"]
         ic50_menor = int(min(mirar))
-        with open(f"{nom_arx}.csv", "w") as file:
+        linies = open(f"{nom_arx}.csv", "r").read()
+        combinacio = zip(smiles, ic50)
+        with open(f"{nom_arx}.csv", "a", newline="") as file:
             writer = csv.writer(file)
-            writer.writerows(zip(smiles, ic50))
+            for i in combinacio:
+                if i[0] not in linies:
+                    writer.writerows(f"{i[0]},{i[1]}")
     '''if pujar_a_mega == True:
         compte = Mega.login_anonymous()
         pujada = compte.upload(f"{nom_arx}.csv")

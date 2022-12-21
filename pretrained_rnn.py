@@ -123,7 +123,10 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                             Draw.MolToImageFile(
                                 mol1, filename=f"moleculas_generadas/moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
                         with open(f"{path_desti_molecules}", "a") as file:
-                            file.write(i + "\n")
+                            with open(f"{path_desti_molecules}", "r") as f:
+                                linies = [linea.rstrip() for linea in f]
+                            if f"{i}" not in linies:
+                                file.write(i + "\n")
                         total_smiles.append(i)
                         print("La molecula es drug-like")
             else:
