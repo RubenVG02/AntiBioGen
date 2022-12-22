@@ -83,7 +83,7 @@ def model_cnn():
     embed = Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
     x = Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_smiles))(embed)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(50700, maxim_smiles))(embed)
     x = PReLU()(x)
 
     x = Conv1D(filters=64, kernel_size=3, padding="SAME")(x)
@@ -101,7 +101,7 @@ def model_cnn():
     embed2 = Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
     x2 = Conv1D(
-        filters=32, kernel_size=3, padding="SAME", input_shape=(4000, maxim_fasta))(embed2)
+        filters=32, kernel_size=3, padding="SAME", input_shape=(50700, maxim_fasta))(embed2)
     x2 = PReLU()(embed2)
 
     x2 = Conv1D(

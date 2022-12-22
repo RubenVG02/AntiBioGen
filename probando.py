@@ -1,9 +1,10 @@
-lista1 = [1, 2, 3, 4]
-lista2 = [5, 7, 3, 5]
+lista1 = ["hola", "ffdfds", "fdsfdsf", "adios"]
+lista2 = [423243, 7, 3, 5]
 
 a = zip(lista1, lista2)
 
 a = list(a)
-
-for i in a:
-    print(f"{i[0]},{i[1]}")
+with open("prueba.csv", "w") as file:
+    for i in a:
+        file.write(f"{i[0]},{i[1]}\n")
+        print(f"{i[0]},{i[1]}")

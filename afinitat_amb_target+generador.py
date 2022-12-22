@@ -48,13 +48,13 @@ def buscar_candidats(target=target, forma_guardat="csv", nom_arx="prueba_tio", p
             except:
                 ic50.append("error")
         ic50_menor = int(min(mirar))
+
+        combinacio = list(zip(smiles, ic50))
         linies = open(f"{nom_arx}.csv", "r").read()
-        combinacio = zip(smiles, ic50)
         with open(f"{nom_arx}.csv", "a", newline="") as file:
-            writer = csv.writer(file)
             for i in combinacio:
-                if i[0] not in linies:
-                    writer.writerows(f"{i[0]},{i[1]}")
+                if str(i[1]) not in linies:
+                    file.write(f"{i[0]},{i[1]}\n")
     '''if pujar_a_mega == True:
         compte = Mega.login_anonymous()
         pujada = compte.upload(f"{nom_arx}.csv")
