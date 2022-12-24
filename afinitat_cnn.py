@@ -177,7 +177,7 @@ def model_cnn():
             r = modelo.fit({'smiles_input': np.array(X_smiles),
                             'fasta_input': np.array(X_fasta)}, {'output': np.array(y_train)},
                            validation_data=({'smiles_input': np.array(X_test_smile),
-                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint], epochs=1, batch_size=64, shuffle=True)
+                                             'fasta_input': np.array(X_test_fasta)}, {'output': np.array(T_test_IC50)}),  callbacks=[checkpoint], epochs=1, batch_size=128, shuffle=True)
 
             inici += tamany_per_epoch
             final += tamany_per_epoch
