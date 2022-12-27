@@ -51,11 +51,11 @@ def obtenir_smiles(arx_origen="500k_dades", arx_desti_txt="smiles_22"):
         -arx_origen: arxiu a partir del qual obtindrem els smiles
         -arx_desti_txt: arxiu on es guardaran els smiles
     '''
-    dades = pd.read_csv(f"{arx_origen}.csv", sep=",")
+    dades = pd.read_csv(f"{arx_origen}.csv", sep=";",low_memory=False)
     llista_smiles = dades["Smiles"].unique()
     with open(f"{arx_desti_txt}.txt", "w") as f:
         for line in llista_smiles:
-            f.write(line + "\n")
+            f.write(str(line) + "\n")
 
 
 def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
@@ -119,6 +119,6 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
 
 
 #neteja_dades_afinitat(nom_arx="inh", nom_desti="500k_dades_amb@", col_smiles="Ligand SMILES",col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain  Sequence")
-neteja_dades_rnn(nom_arx="parte2", nom_arx2="parte2_csv")
-obtenir_smiles(arx_origen="parte2_csv",
-               arx_desti_txt="parte2_txt")
+#neteja_dades_rnn(nom_arx="parte2", nom_arx2="parte2_csv")
+obtenir_smiles(arx_origen=r"C:\Users\ASUS\Desktop\github22\hhgfhgfhgfh",
+               arx_desti_txt="98k")
