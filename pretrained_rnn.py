@@ -17,7 +17,7 @@ import time
 from rdkit.Chem import Draw
 
 
-def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\modelo_prueba_rnn_aversiva.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\prueba/xaa.txt",
+def generador(path_model=r"C:\Users\ASUS\Desktop\github22\modelo_rnn_smalls.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt",
               nombre_generats=100, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike.txt"):
     '''
         Paràmetres:
@@ -30,7 +30,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
     def split_input_target(chunk):
         input_text = chunk[:-1]
         target_idx = chunk[-1]
-        target = tf.one_hot(target_idx, depth=50)
+        target = tf.one_hot(target_idx, depth=48)
         target = tf.reshape(target, [-1])
         return input_text, target
 
@@ -59,7 +59,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
 
     dataset = sequences.map(split_input_target)
 
-    dataset = dataset.shuffle(10000).batch(256, drop_remainder=True)
+    dataset = dataset.shuffle(20000).batch(256, drop_remainder=True)
 
     def crear_model():
         modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
@@ -78,7 +78,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                                             Dropout(0.1),
                                             CuDNNLSTM(128),
                                             Dropout(0.1),
-                                            Dense(mapa_char-2, activation="softmax")])
+                                            Dense(mapa_char+2, activation="softmax")])
         return modelo
 
     modelo = crear_model()
@@ -121,7 +121,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                     if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:
                         if img_druglike == True:
                             Draw.MolToImageFile(
-                                mol1, filename=f"moleculas_generadas/moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
+                                mol1, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
                         with open(f"{path_desti_molecules}", "a") as file:
                             with open(f"{path_desti_molecules}", "r") as f:
                                 linies = [linea.rstrip() for linea in f]
@@ -133,3 +133,5 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                 pass
         final = ""
     return total_smiles
+
+generador()
