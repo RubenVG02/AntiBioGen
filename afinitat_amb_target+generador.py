@@ -30,7 +30,7 @@ target = "MAQTQGTKRKVCYYYDGDVGNYYYGQGHPMKPHRIRMTHNLLLNYGLYRKMEIYRPHKANAEEMTKYHSD
 
 
 def crear_arxiu(nom_arxiu, headers=["smiles", "IC50", "score"]):
-    with open(f"{nom_arxiu}.csv", "w") as file:
+    with open(f"{nom_arxiu}.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerow(headers)
 
@@ -44,11 +44,10 @@ def buscar_candidats(target=target, forma_guardat="csv", nom_arx="prueba_tio", p
     crear_arxiu(nom_arxiu=nom_arx)
 
     while not int(ic50_menor) < 100:
-        generats = generador(nombre_generats=2, img_druglike=False)
-        smiles.append(generats)
+        generats = generador(nombre_generats=10, img_druglike=False)
+        smiles.extend(generats)
         for i in generats:
             molecula = Chem.MolFromSmiles(i)
-            print(molecula)
             sascore = sascorer.calculateScore(molecula)
             score.append(sascore)
             i = i.replace("@", "").replace("/", "")
@@ -59,13 +58,15 @@ def buscar_candidats(target=target, forma_guardat="csv", nom_arx="prueba_tio", p
             except:
                 ic50.append("error")
         ic50_menor = int(min(ic50))
-        print(score)
         combinacio = list(zip(smiles, ic50, score))
+        print(combinacio[1])
+        print(combinacio[0])
         linies = open(f"{nom_arx}.csv", "r").read()
         with open(f"{nom_arx}.csv", "a", newline="") as file:
             for i in combinacio:
                 if str(i[1]) not in linies:
                     file.write(f"{i[0]},{i[1]},{i[2]}\n")
+                
     '''if pujar_a_mega == True:
         compte = Mega.login_anonymous()
         pujada = compte.upload(f"{nom_arx}.csv")
