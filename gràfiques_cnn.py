@@ -14,10 +14,10 @@ def crear_gràfiques(path_dades_bones=r"C:\Users\ASUS\Desktop\github22\dasdsd\CS
     smiles = np.array([smile for smile in dades_reals["smiles"]])
     fasta = np.array([fasta for fasta in dades_reals["sequence"]], dtype="S")
     ic50 = np.array([ic50 for ic50 in dades_reals["IC50"]], dtype="f")
-    predits = np.array(dtype="f")
+    predits = []
     for i in range(50):
-        predicció = mesurador_afinitat(smile=smiles[i], fasta=fasta[i])
-        np.append(predits, predicció)
+        predicció = mesurador_afinitat(smile="CCN(CCO)CC(=O)N1CC[C@@H](C(=O)N[C@H]2C[C@@H](C)O[C@@H](C)C2)CC1", fasta=fasta[i])
+        predits.append(predicció)
 
     plt.scatter(predits, ic50[0:50])
     plt.xlabel("Valors Predits")
