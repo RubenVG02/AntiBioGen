@@ -3,3 +3,6 @@
 ayda.py
 affinity-best.hdf5
 main1.py
+sascore.py
+.gitignore
+comparar_elements_smiles.py
