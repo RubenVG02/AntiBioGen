@@ -22,7 +22,7 @@ elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', '
 # elements_smiles fa referencia a els elements pels quals es poden formar els smiles
 
 int_smiles = dict(zip(elements_smiles, range(1, len(elements_smiles)+1)))
-# Per associar tots els elements amb un int determinat
+# Per associar tots els elements amb un int determinat (range és 1, len+1 perquè es plenen amb zeros per arribar a maxim_smiles)
 
 maxim_fasta = 5000
 elements_fasta = ['A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
@@ -34,9 +34,9 @@ int_fasta = dict(zip(elements_fasta, range(1, len(elements_fasta))))
 
 def convertir(arx=arx):
     '''
-# Funció per convertir tots els elements (tant smiles, com fasta) en int, per tal de ser entrenats al model
+    Funció per convertir tots els elements (tant smiles, com fasta) en int, per tal de ser entrenats al model
 
-'''
+    '''
 
     smiles_amb_numeros = []  # Smiles obtinguts amb int_smiles[1] i els smiles del df
     for i in arx.smiles:
@@ -133,11 +133,8 @@ def model_cnn():
     modelo = tf.keras.models.Model(
         inputs=[smiles_input, fasta_input], outputs=[output])
 
-    # loss function
-    def root_mean_squared_error(y_true, y_pred):
-        return K.sqrt(mean_squared_error(y_true, y_pred))
-
-    # accuracy metric
+ 
+    # funció per mirar la precisió del model (serà la nostra metric)
     def r2_score(y_true, y_pred):
         SS_res = K.sum(K.square(y_true - y_pred))
         SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
@@ -158,8 +155,6 @@ def model_cnn():
 
     # Utilitzem un valor elevat per poder obtenir millors resultats
     tamany_per_epoch = 50700
-    # utilizarem el 80/20 per entrenar y fer test al nostre model
-    # training = len(arx)*0.8
 
     train = arx[:355000]
     loss = []

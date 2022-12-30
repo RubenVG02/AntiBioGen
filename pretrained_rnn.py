@@ -18,7 +18,7 @@ from rdkit.Chem import Draw
 
 
 def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\modelo_prueba_rnn_aversiva.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt",
-              nombre_generats=50, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike.txt"):
+              nombre_generats=200, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike.txt"):
     '''
         Paràmetres:
         -path_model: Path on es troba el model ja entrenat
@@ -112,7 +112,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
         final = final.split("\n")
         for i in final:
             mol1 = Chem.MolFromSmiles(i)
-            if len(i) > 15:
+            if len(i) > 20:
                 if mol1 == None:
                     print("error")
                 elif not mol1 == None:
@@ -133,5 +133,3 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                 pass
         final = ""
     return total_smiles
-
-generador()
