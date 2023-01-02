@@ -3,7 +3,7 @@ from rdkit.Chem import Draw
 
 
 
-smile = "Cc1nccn1C1CCN(C(=O)c2ccc(NC(=O)c3ccccc3)cc2)CC1"
+smile = "OC(=O)[C@@H](C)[NH2+][C@@H](Cc1c[nH]c2ccccc12)C(=O)NCC(C)C"
 
 molecula = Chem.MolFromSmiles(smile)
 Draw.MolToImageFile(molecula, filename="molecula22.jpg",

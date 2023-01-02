@@ -12,8 +12,9 @@ from rdkit.Chem import Draw
 import os
 import sys
 import base64
+import qrcode
 
-# Errors sacore
+# Per importar sascore per fer servir l'Accessibility Score
 from rdkit.Chem import RDConfig
 sys.path.append(os.path.join(RDConfig.RDContribDir, 'SA_Score'))
 import sascorer
@@ -44,6 +45,7 @@ def pujar_mega(nom_arx):
     pujada = mega.upload(f"{nom_arx}.csv")
     link=mega.get_upload_link(pujada)
     print(link)
+    return link
     
 def dibuix_millor(ic50_menor, ic50, smiles, nom_arx):
     '''
@@ -55,7 +57,7 @@ def dibuix_millor(ic50_menor, ic50, smiles, nom_arx):
     Draw.MolToImageFile(molecula, filename=f"millor_molecula_{nom_arx}.jpg",
             size=(400, 300))
 
-def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_mega=True, dibuixar_menor=True, maxim_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", valor_acceptat=100):
+def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_mega=True, dibuixar_menor=True, maxim_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", valor_acceptat=100, generar_qr=True):
     '''
     Funció per generar molécules utilitzant un model RNN, i comparar la seva afinitat amb un target específic, a més d'obtenir un score representatiu a la 
     complexitat de la seva síntesi
@@ -65,7 +67,11 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
     -nom_arx: nom de l'arxiu csv on es guardaran els resultats obtinguts (Columnes: smiles, IC50, score)
     -pujar_a_mega: pujar el csv generat a Mega.nz i obtenir un link de descàrrega per poder descarregar posteriorment l'arxiu. Per default, True
     -dibuixar_menor: Obtenir un arxiu .jpg de la molècula smile amb millor afinitat. Per default, True
-    
+    -db_smiles: Analitzar afinitat a partir d'un arxiu .txt amb SMILES. Default, True
+    -arx_db: Enllaç de l'arxiu de la db amb SMILES. Requereix db_smiles=True
+    -valor_acceptat: Valor a partir del qual podem considerar una molècula com vàlida expressat en nM. Valor default, 100.
+    -maxim_molecules: Quantitat màxima de molècules que vols al teu arxiu de destí, en funció del paràmetre valor_acceptat. Per default, 5.
+    -generar_qr: Per generar un arxiu qr del teu enllaç de mega. Requereix pujar_a_mega=True. El QR es guardarà com a qr_{nom_arx}.
     
     Returns:
     -Arxiu .csv amb els resultats obtinguts amb el teu target d'interés.
@@ -111,7 +117,10 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
                 file.write(f"{i[0]},{i[1]},{i[2]}\n")
                 
     if pujar_a_mega == True:
-        pujar_mega(nom_arx)
+        enllaç=pujar_mega(nom_arx)
+        if generar_qr:
+            qr_generat=qrcode.make(enllaç)
+            qr_generat.save(f"qr_{nom_arx}.png")
         
     
     '''FQx1aKXvDO4jabS4siLmxw'''
@@ -119,7 +128,7 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
         dibuix_millor(ic50_menor,ic50,smiles, nom_arx)
             
 
-buscar_candidats(nom_arx="Citocrom_P450 (M.Tuberculosis)")
+buscar_candidats(nom_arx="pruebadadadsd",db_smiles=False, valor_acceptat=4000)
 
 
 

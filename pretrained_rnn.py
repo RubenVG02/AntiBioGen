@@ -1,24 +1,24 @@
 import tensorflow as tf
-import pandas as pd
-from keras.models import load_model
+
 from keras.layers import CuDNNLSTM
 from keras.layers import Dropout
 from keras.layers import Dense
 from keras.layers import BatchNormalization
-from keras.callbacks import ModelCheckpoint
-import tensorflow_datasets as tfds
+
 from rdkit import Chem
-from rdkit.Chem import Descriptors, Lipinski
+from rdkit.Chem import Descriptors
+from rdkit.Chem import Draw
+
 import numpy as np
 import sys
 import random
 import time
 
-from rdkit.Chem import Draw
+
 
 
 def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\modelo_prueba_rnn_aversiva.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt",
-              nombre_generats=200, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike.txt"):
+              nombre_generats=200, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike2.txt"):
     '''
         Paràmetres:
         -path_model: Path on es troba el model ja entrenat
