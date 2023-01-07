@@ -19,7 +19,7 @@ import time
 
 
 def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\modelo_prueba_rnn_aversiva.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt",
-              nombre_generats=200, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike2.txt"):
+              nombre_generats=100, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike2.txt"):
     '''
         Paràmetres:
         -path_model: Path on es troba el model ja entrenat
@@ -110,7 +110,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
     final = ""
     total_smiles = []
     for i in range(nombre_generats):
-        for i in range(random.randrange(50,137)):
+        for i in range(random.randrange(100,137)):
             x = np.reshape(pattern, (1, len(pattern)))
             predicció = modelo.predict(x, verbose=0)
             index = np.argmax(predicció)  #Agafar el valor màxim de l'array de predicció
@@ -144,4 +144,4 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
         final = ""
     return total_smiles
 
-generador()
+generador(nombre_generats=50)
