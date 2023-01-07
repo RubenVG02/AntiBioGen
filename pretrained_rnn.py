@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_datasets as tfds
 
 from keras.layers import CuDNNLSTM
 from keras.layers import Dropout
@@ -27,12 +28,26 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
         -img_druglike: Per generar imatges .jpg de les molècules drug-like generades (estaran ordenades en funció de epoch) (Per default True)
         -Path_desti_molecules: Path de destí de les seqüencies SMILE generades
     '''
-    def split_input_target(chunk):
-        input_text = chunk[:-1]
-        target_idx = chunk[-1]
-        target = tf.one_hot(target_idx, depth=50)
+    def split_input_target(valors):
+        input_text = valors[:-1]
+        target_idx = valors[-1]
+        target = tf.one_hot(target_idx, depth=mapa_char-2)  #depth ha de ser igual al numero d'outputs diferents del model pre-entrenat
         target = tf.reshape(target, [-1])
         return input_text, target
+    
+    def crear_seeds(maxim_molecules=137):
+        '''
+        Funció que agafa el teu ds i permet obtenir una seed d'aquest per generar molecules
+        
+        Paràmetres:
+            -maxim_molecules: Longitut maxima que vulguis que tingui el teu pattern/seed, per default, 137
+        
+        '''
+        generador_seeds=tfds.as_numpy(dataset.take(random.randint(0, len(dades))).take(1))
+        for a, b in enumerate(generador_seeds):
+            break
+        pattern=b[0][np.random.randint(0,maxim_molecules)]
+        return pattern
 
     with open(f"{path_dades}") as f:
         dades = "\n".join(line.strip() for line in f)
@@ -47,8 +62,8 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
 
     mapa_int = len(elements_smiles)
     mapa_char = len(int_a_elements)
-
-    max_smile = 137
+    
+    
 
     slices = np.array([[elements_smiles[c]] for c in dades])
 
@@ -60,6 +75,9 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
     dataset = sequences.map(split_input_target)
 
     dataset = dataset.shuffle(20000).batch(256, drop_remainder=True)
+    
+
+    
 
     def crear_model():
         modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
@@ -85,29 +103,21 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
     modelo.load_weights(f"{path_model}")
     modelo.compile(loss='categorical_crossentropy', optimizer='adam')
 
-    ### Generació de molecules###
+    ###GENERACIÓ DE MOLÈCULES###
     seq_length = 137
-    dataX = []
-    dataY = []
-    for i in range(0, len(dades) - seq_length, 1):
-        seq_in = dades[i:i + seq_length]
-        seq_out = dades[i + seq_length]
-        dataX.append([elements_smiles[char] for char in seq_in])
-        dataY.append(elements_smiles[seq_out])
-    pattern = dataX[np.random.randint(0, len(dataX)-1)]
-    print("\"", ''.join([int_a_elements[value] for value in pattern]), "\"")
+    pattern=crear_seeds(maxim_molecules=seq_length)
+    print("\"", ''.join([int_a_elements[value[0]] for value in pattern]), "\"")
     final = ""
     total_smiles = []
     for i in range(nombre_generats):
-        for i in range(random.randrange(100, 137)):
-            x = np.reshape(pattern, (1, len(pattern), 1))
-            prediction = modelo.predict(x, verbose=0)
-            index = np.argmax(prediction)
-            result = int_a_elements[index]
-            seq_in = [int_a_elements[value] for value in pattern]
-            sys.stdout.write(result)
-            final += result
-            pattern.append(index)
+        for i in range(random.randrange(50,137)):
+            x = np.reshape(pattern, (1, len(pattern)))
+            predicció = modelo.predict(x, verbose=0)
+            index = np.argmax(predicció)  #Agafar el valor màxim de l'array de predicció
+            resultat = int_a_elements[index]
+            print(resultat, end="")
+            final += resultat
+            pattern=np.append(pattern, index)
             pattern = pattern[1:len(pattern)]
         final = final.split("\n")
         for i in final:
@@ -116,7 +126,7 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                 if mol1 == None:
                     print("error")
                 elif not mol1 == None:
-                    print(result)
+                    print(resultat)
                     print("Ha sortit una molècula químicament possible, miro si és drug-like")
                     if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:  
                         with open(f"{path_desti_molecules}", "a") as file:
@@ -133,3 +143,5 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\
                 pass
         final = ""
     return total_smiles
+
+generador()
