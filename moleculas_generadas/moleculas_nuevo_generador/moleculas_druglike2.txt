@@ -661,3 +661,17 @@ CCC[C@H](C)NC(=O)N[C@H]1CCCC[C@@H]1O
 CCSC(=O)N1CCC(C)(C)CC1
 OC(=O)[C@@H](C)[NH2+][C@@H](Cc1c[nH]c2ccccc12)C(=O)NCC(C)C
 c1cccc(C(=O)N[C@H](C)c2ccc(Cl)cc2)c1
+CC(C)CN1CCN(C(=O)NCCc2ccccc2)CC1=O
+CC(C)[C@@H](CO)N1CC[C@@H](C(=O)NCC(=O)NC2CCCCC2)CC1
+Cc1cc(S(=O)(=O)N[C@H](C)C(=O)[O-])ccc1C(=O)NCC(C)C
+CCCOC[C@H](O)[C@@H](C)OC(=O)c1ccc2c(c1)OCCO2
+CCc1nn(C)cc1C(=O)N(C)
+Cc1ccccc1OCC(=O)N(CC)CCCCCC
+CC(C)C[NH+](C)[C@@H]1CCC[C@@H]1O
+CC(C)CCC[NH+](C)Cc1ccccc1
+O=C(CC1=C(N)C(=O)C(C)(C)C1)Nc1ccc(OCc2ccc(F)cc2)cc1
+CC(C)CN1CC[C@@H](C(=O)NCC(=O)Nc2ccc(C)cc2)C1
+CC[C@H](NC(=O)[C@H]1CCCN(C(=O)Nc2ccc(Cl)cc2)C1)C
+CC(=O)NC1CCN(c2ccccc2)CC(=O)N1C
+c1ccccc1OC1C[C@H](C(=O)[O-])C[C@@H]1CO
+N1CCC[C@@H]1C(=O)NCCc1ccc(OC)cc1

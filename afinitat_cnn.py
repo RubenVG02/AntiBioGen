@@ -16,10 +16,10 @@ arx = pd.read_csv(
 
 
 # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
-maxim_smiles = 100
-elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', 'K', 'n', 'B', 'F', '4', '+', ']', '-', '1', 'P',
-                   '0', 'L', '%', 'g', '9', 'Z', '(', 'N', '8', 'I', '7', '5', 'l', ')', 'A', 'e', 'o', 'V', 's', 'S', '2', 'M', 'T', 'u', 'i']
+maxim_smiles = 130
+elements_smiles = ['N', '2', 'H', 'K', 'Z', 'O', 'M', ']', 'c', 'l', '=', '6', ')', 'F', 'o', 'r', '7', 'P','g', '5', 't', '8', '9', '1', '0', 'I', '4', '[', 'i', 'a', 'C', '-', 'n', '#', 'L', '(', 'S', 'B', 'A', 'T', 's', '3', '+', 'e']
 # elements_smiles fa referencia a els elements pels quals es poden formar els smiles
+# si es vol utilitzar totes les del teu arx: arx.smiles.apply(list).sum(), tot i que trigará molt en arx molt grans
 
 int_smiles = dict(zip(elements_smiles, range(1, len(elements_smiles)+1)))
 # Per associar tots els elements amb un int determinat (range és 1, len+1 perquè es plenen amb zeros per arribar a maxim_smiles)
@@ -78,7 +78,7 @@ def model_cnn():
     regulador = l2(0.001)
 
     # model per a smiles
-    smiles_input = tf.keras.Input(
+    smiles_input = Input(
         shape=(maxim_smiles,), dtype='int32', name='smiles_input')
     embed = Embedding(input_dim=len(
         elements_smiles)+1, input_length=maxim_smiles, output_dim=128)(smiles_input)
@@ -97,7 +97,7 @@ def model_cnn():
         x)  # maxpool per obtenir un vector de 1d
 
     # model per fastas
-    fasta_input = tf.keras.Input(shape=(maxim_fasta,), name='fasta_input')
+    fasta_input = Input(shape=(maxim_fasta,), name='fasta_input')
     embed2 = Embedding(input_dim=len(
         elements_fasta)+1, input_length=maxim_fasta, output_dim=256)(fasta_input)
     x2 = Conv1D(

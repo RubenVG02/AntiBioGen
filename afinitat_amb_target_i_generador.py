@@ -80,7 +80,6 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
     '''
     ic50 = []
     smiles = []
-    mirar = []
     score = []
     crear_arxiu(nom_arxiu=nom_arx)
     valor=0
@@ -103,7 +102,6 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
                 if predicció_ic50<valor_acceptat:
                     valor+=1
                 ic50.append(float(predicció_ic50))
-                mirar.append(float(predicció_ic50))
             except:
                 ic50.append(999999999999999)
             if valor==maxim_molecules:
