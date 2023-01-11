@@ -54,7 +54,7 @@ def dibuix_millor(ic50_menor, ic50, smiles, nom_arx):
     index=ic50.index(ic50_menor)
     millor=smiles[index]
     molecula=Chem.MolFromSmiles(millor)
-    Draw.MolToImageFile(molecula, filename=f"millor_molecula_{nom_arx}.jpg",
+    Draw.MolToImageFile(molecula, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\molecules/millor_molecula_{nom_arx}.jpg",
             size=(400, 300))
 
 def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_mega=True, dibuixar_menor=True, maxim_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", valor_acceptat=100, generar_qr=True):
@@ -118,7 +118,7 @@ def buscar_candidats(target=target, nom_arx="Alfa_Pol3 (B.Subtilis)", pujar_a_me
         enllaç=pujar_mega(nom_arx)
         if generar_qr:
             qr_generat=qrcode.make(enllaç)
-            qr_generat.save(f"qr_{nom_arx}.png")
+            qr_generat.save(fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\qr/qr_{nom_arx}.png")
         
     
     '''FQx1aKXvDO4jabS4siLmxw'''

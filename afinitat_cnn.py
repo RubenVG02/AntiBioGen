@@ -140,7 +140,7 @@ def model_cnn():
         return (1-SS_res/(SS_tot)+K.epsilon())
 
     modelo.load_weights(
-        r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\model_prueba_cnn.hdf5")
+        r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definitius\model_prueba_cnn.hdf5")
     modelo.compile(optimizer="adam",
                    # categorical_crossentropy/mean_squared_logarithmic_error/ tf.keras.losses.mean_squared_logarithmic_error
                    loss={'output': "mean_squared_logarithmic_error"},

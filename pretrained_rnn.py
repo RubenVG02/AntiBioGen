@@ -18,7 +18,7 @@ import time
 
 
 
-def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\nuevos_modelos\modelo_prueba_rnn_aversiva.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\xab.txt",
+def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definitius\modelo_prueba_rnn.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\arxius_txt\xab.txt",
               nombre_generats=100, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike2.txt"):
     '''
         Paràmetres:

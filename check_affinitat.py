@@ -8,7 +8,7 @@ from keras.regularizers import l2
 # dades = neteja_dades_afinitat()
 
 
-def mesurador_afinitat(path_csv=r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv", smile="", fasta="", path_model=r"C:\Users\ASUS\Desktop\github22\model_prueba_cnn.hdf5"):
+def mesurador_afinitat(path_csv=r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv", smile="", fasta="", path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definitius\model_prueba_cnn.hdf5"):
     arx = pd.read_csv(f"{path_csv}", sep=",")
 
     # valor maxim que vull que tingin les meves smiles, serviran per entrenar el model
