@@ -2,10 +2,7 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
-from keras.callbacks import ModelCheckpoint
-from keras import backend as K
-from keras.losses import mean_squared_error
-from keras.layers import Dense, Conv1D, GlobalMaxPooling1D, Embedding, Input, PReLU, Dropout, concatenate, BatchNormalization
+from keras.layers import Dense, Conv1D, GlobalMaxPooling1D, Embedding, PReLU, Dropout, concatenate, BatchNormalization
 from keras.regularizers import l2
 
 # dades = neteja_dades_afinitat()

@@ -5,6 +5,8 @@ import csv
 
 def seleccio_mol(id, nom_arx="dades", nom_df="df"):
     '''
+    Funció per obtenir tots els smiles d'un target determinat, i introduir-los a un arxiu csv
+    
     Parametres:
         -ID de CHEMBL 
         -Nom de l'arxiu (per determinat, "dades1")
@@ -102,7 +104,7 @@ def neteja_dades_afinitat(nom_arx="inh", nom_desti="cnn_arreglat", col_smiles="L
     df_no_dup = df_no_dup[df_no_dup["IC50"] < 1000000]
     df_no_dup = df_no_dup[df_no_dup["smiles"].str.len() < 100]
     df_no_dup = df_no_dup[df_no_dup["sequence"].str.len() < 5000]
-    smiles_sense_simbols = []
+    #smiles_sense_simbols = []
     ''' for i in df_no_dup["smiles"]:
         smiles_sense_simbols.append(i.replace("@", "").replace("\\",
                                                                "").replace("/", "").replace(".", ""))'''

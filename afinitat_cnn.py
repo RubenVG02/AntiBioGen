@@ -5,11 +5,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import backend as K
-from keras.losses import mean_squared_error
 from keras.layers import Dense, Conv1D, GlobalMaxPooling1D, Embedding, Input, PReLU, Dropout, concatenate, BatchNormalization
 from keras.regularizers import l2
 
-# dades = neteja_dades_afinitat()
+
 
 arx = pd.read_csv(
     r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv", sep=",")
@@ -179,7 +178,6 @@ def model_cnn():
 
         loss.append(r.history["loss"])
         loss_validades.append(r.history["val_loss"])
-        print("He hecho append del loss y del val_loss")
 
     plt.plot(range(epochs), loss, label="loss")
     plt.plot(range(epochs), loss_validades, label="val_loss")
