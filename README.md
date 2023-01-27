@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-
 =======
-# AntibioticsDiscovery
->>>>>>> f447431bef63def341c602f7bf6938317eb5f012
+Python project using neural networks to design antibiotic compounds that have affinity to an specific target, in function of the IC50 value associated between the FASTA target sequence and the generated SMILE compounds
+
