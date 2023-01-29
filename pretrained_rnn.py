@@ -18,50 +18,50 @@ import time
 
 
 
-def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definitius\modelo_prueba_rnn.hdf5", path_dades=r"C:\Users\ASUS\Desktop\github22\dasdsd\arxius_txt\xab.txt",
-              nombre_generats=100, img_druglike=True, path_desti_molecules=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas//moleculas_nuevo_generador/moleculas_druglike2.txt"):
+def generator(path_model=r"", path_data=r"",
+              number_generated=100, img_druglike=True, path_destination_molecules=r""):
     '''
-        Paràmetres:
-        -path_model: Path on es troba el model ja entrenat
-        -path_dades: Path on es troben les dades utlitzades (path model i path dades han de tenir les mateixes dimensions/mateixa quantitat d'elements diferents)
-        -nombre_generats: Nombre de molècules que es generen, per predeterminat 100
-        -img_druglike: Per generar imatges .jpg de les molècules drug-like generades (estaran ordenades en funció de epoch) (Per default True)
-        -Path_desti_molecules: Path de destí de les seqüencies SMILE generades
+        Parameters:
+        -path_model: Path where the already trained model is located
+        -path_data: Path where the data used is located (path model and path data must have the same dimensions/same amount of different elements)
+        -number_generated: Number of molecules that are generated, by default 100
+        -img_druglike: To generate .jpg images of the generated drug-like molecules (they will be ordered according to epoch) (By default True)
+        -Path_destination_molecules: Destination path of the generated SMILE sequences
     '''
     def split_input_target(valors):
         input_text = valors[:-1]
         target_idx = valors[-1]
-        target = tf.one_hot(target_idx, depth=mapa_char-2)  #depth ha de ser igual al numero d'outputs diferents del model pre-entrenat
+        target = tf.one_hot(target_idx, depth=map_char)  #depth must be equal to the number of different outputs of the pre-trained model
         target = tf.reshape(target, [-1])
         return input_text, target
     
-    def crear_seeds(maxim_molecules=137):
+    def create_seed(max_molecules=137):
         '''
-        Funció que agafa el teu ds i permet obtenir una seed d'aquest per generar molecules
+        Function that takes your ds and allows you to obtain a seed from it to generate molecules
         
-        Paràmetres:
-            -maxim_molecules: Longitut maxima que vulguis que tingui el teu pattern/seed, per default, 137
+        Parameters:
+            -max_molecules: Maximum length you want your pattern/seed to have, by default, 137
         
         '''
         generador_seeds=tfds.as_numpy(dataset.take(random.randint(0, len(dades))).take(1))
         for a, b in enumerate(generador_seeds):
             break
-        pattern=b[0][np.random.randint(0,maxim_molecules)]
+        pattern=b[0][np.random.randint(0,max_molecules)]
         return pattern
 
-    with open(f"{path_dades}") as f:
+    with open(f"{path_data}") as f:
         dades = "\n".join(line.strip() for line in f)
 
-    # per obtenir els elements unics de dades
+
     elements_smiles = {u: i for i, u in enumerate(sorted(set(dades)))}
     elements_smiles.update({-1: "\n"})
 
-    # per passar els elements unics de dades a
-    int_a_elements = {i: c for i, c in enumerate(elements_smiles)}
-    int_a_elements.update({"\n": -1})
 
-    mapa_int = len(elements_smiles)
-    mapa_char = len(int_a_elements)
+    int_2_elements = {i: c for i, c in enumerate(elements_smiles)}
+    int_2_elements.update({"\n": -1})
+
+    map_int = len(elements_smiles)
+    map_char = len(int_2_elements)
     
     
 
@@ -79,8 +79,8 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definiti
 
     
 
-    def crear_model():
-        modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
+    def create_model():
+        model = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
                                             Dropout(0.1),
                                             CuDNNLSTM(
                                                 256, return_sequences=True),
@@ -96,27 +96,27 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definiti
                                             Dropout(0.1),
                                             CuDNNLSTM(128),
                                             Dropout(0.1),
-                                            Dense(mapa_char-2, activation="softmax")])
-        return modelo
+                                            Dense(map_char, activation="softmax")])
+        return model
 
-    modelo = crear_model()
-    modelo.load_weights(f"{path_model}")
-    modelo.compile(loss='categorical_crossentropy', optimizer='adam')
+    model = create_model()
+    model.load_weights(f"{path_model}")
+    model.compile(loss='categorical_crossentropy', optimizer='adam')
 
-    ###GENERACIÓ DE MOLÈCULES###
+###GENERATION OF MOLECULES###    
     seq_length = 137
-    pattern=crear_seeds(maxim_molecules=seq_length)
-    print("\"", ''.join([int_a_elements[value[0]] for value in pattern]), "\"")
+    pattern=create_seed(max_molecules=seq_length)
+    print("\"", ''.join([int_2_elements[value[0]] for value in pattern]), "\"")
     final = ""
     total_smiles = []
-    for i in range(nombre_generats):
+    for i in range(number_generated):
         for i in range(random.randrange(100,137)):
             x = np.reshape(pattern, (1, len(pattern)))
-            predicció = modelo.predict(x, verbose=0)
-            index = np.argmax(predicció)  #Agafar el valor màxim de l'array de predicció
-            resultat = int_a_elements[index]
-            print(resultat, end="")
-            final += resultat
+            prediction = model.predict(x, verbose=0)
+            index = np.argmax(prediction)  #Get the maximum value from the prediction array
+            result = int_2_elements[index]
+            print(result, end="")
+            final += result
             pattern=np.append(pattern, index)
             pattern = pattern[1:len(pattern)]
         final = final.split("\n")
@@ -126,11 +126,12 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definiti
                 if mol1 == None:
                     print("error")
                 elif not mol1 == None:
-                    print(resultat)
-                    print("Ha sortit una molècula químicament possible, miro si és drug-like")
-                    if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:  
-                        with open(f"{path_desti_molecules}", "a") as file:
-                            with open(f"{path_desti_molecules}", "r") as f:
+                    print(result)
+                    print("A chemically possible molecule has come out, I look to see if it is drug-like")
+                    if Descriptors.ExactMolWt(mol1) < 500 and Descriptors.MolLogP(mol1) < 5 and Descriptors.NumHDonors(mol1) < 5 and Descriptors.NumHAcceptors(mol1) < 10:
+                        #All the conditions that a molecule must meet to be considered drug-like  
+                        with open(f"{path_destination_molecules}", "a") as file:
+                            with open(f"{path_destination_molecules}", "r") as f:
                                 linies = [linea.rstrip() for linea in f]
                             if f"{i}" not in linies:
                                 file.write(i + "\n")
@@ -138,10 +139,10 @@ def generador(path_model=r"C:\Users\ASUS\Desktop\github22\dasdsd\models_definiti
                                     Draw.MolToImageFile(
                                 mol1, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
                         total_smiles.append(i)
-                        print("La molècula és drug-like")
+                        print("The obtained molecule is drug-like")
             else:
                 pass
         final = ""
     return total_smiles
 
-generador(nombre_generats=50)
+generator(number_generated=50)
