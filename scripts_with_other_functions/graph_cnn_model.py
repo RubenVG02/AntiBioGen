@@ -6,22 +6,22 @@ import tensorflow as tf
 import numpy as np
 
 
-def crear_gràfiques(path_dades_bones=r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv"):
+def create_graph(path_data_csv=r""):
+    # Function to create a graph comparing the real values and the predicted values
+    real_data = pd.read_csv(
+        path_data_csv, sep=",", header=0, names=["smiles", "sequence", "IC50"])
 
-    dades_reals = pd.read_csv(
-        r"C:\Users\ASUS\Desktop\github22\dasdsd\CSV\500k_dades.csv")
-
-    smiles = np.array([smile for smile in dades_reals["smiles"]])
-    fasta = np.array([fasta for fasta in dades_reals["sequence"]], dtype="S")
-    ic50 = np.array([ic50 for ic50 in dades_reals["IC50"]], dtype="f")
-    predits = []
+    smiles = np.array([smile for smile in real_data["smiles"]])
+    fasta = np.array([fasta for fasta in real_data["sequence"]], dtype="S")
+    ic50 = np.array([ic50 for ic50 in real_data["IC50"]], dtype="f")
+    predicts = []
     for i in range(50):
-        predicció = mesurador_afinitat(smile="CCN(CCO)CC(=O)N1CC[C@@H](C(=O)N[C@H]2C[C@@H](C)O[C@@H](C)C2)CC1", fasta=fasta[i])
-        predits.append(predicció)
+        prediction = mesurador_afinitat(smile="CCN(CCO)CC(=O)N1CC[C@@H](C(=O)N[C@H]2C[C@@H](C)O[C@@H](C)C2)CC1", fasta=fasta[i])
+        predicts.append(prediction)
 
-    plt.scatter(predits, ic50[0:50])
-    plt.xlabel("Valors Predits")
-    plt.ylabel("Valors Reals")
+    plt.scatter(predicts, ic50[0:50])
+    plt.xlabel("Predictions")
+    plt.ylabel("Real values")
     plt.show()
 
 
