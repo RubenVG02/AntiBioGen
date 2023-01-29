@@ -10,43 +10,44 @@ from keras.callbacks import ModelCheckpoint
 import matplotlib.pyplot as plt
 
 
-dades = open(r"C:\Users\ASUS\Desktop\github22\98k.txt").read()
+data = open(r"").read()
 
-# per obtenir els elements unics de dades a numeros enters mitjançant un diccionari
-# així associem un valor numeric a cada lletra
-elements_smiles = {u: i for i, u in enumerate(sorted(set(dades)))}
+# to get the unique data elements to integers using a dictionary
+# so we associate a numerical value to each letter
+elements_smiles = {u: i for i, u in enumerate(sorted(set(data)))}
 elements_smiles.update({-1: "\n"})
 
-# per passar els elements numerics a elements dels smiles
-int_a_elements = {i: u for i, u in enumerate(sorted(set(dades)))}
-int_a_elements.update({"\n": -1})
+# to pass the numeric elements to smile elements
+int_2_elements = {i: u for i, u in enumerate(sorted(set(data)))}
+int_2_elements.update({"\n": -1})
 
-mapa_int = len(elements_smiles)
-mapa_char = len(int_a_elements)
+map_int = len(elements_smiles)
+map_char = len(int_2_elements)
 
 
-def split_input_target(chunk, valors=mapa_char-1):
+def split_input_target(chunk, values=map_char):
+    # Function to split the input and the target
     input_text = chunk[:-1]
     target_idx = chunk[-1]
-    target = tf.one_hot(target_idx, depth=valors)
+    target = tf.one_hot(target_idx, depth=values)
     target = tf.reshape(target, [-1])
     return input_text, target
 
 
 max_smile = 137
 
-slices = np.array([[elements_smiles[c]] for c in dades])
+slices = np.array([[elements_smiles[c]] for c in data])
 
-# Create training examples / targets
+
 char_dataset = tf.data.Dataset.from_tensor_slices(slices)
 
 sequences = char_dataset.batch(137+1, drop_remainder=True)
 
 dataset = sequences.map(split_input_target)
 
-dataset = dataset.shuffle(10000).batch(128, drop_remainder=True)
+dataset = dataset.shuffle(20000).batch(128, drop_remainder=True)
 
-modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
+model = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_sequences=True),
                                      Dropout(0.15),
                                      CuDNNLSTM(256, return_sequences=True),
                                      BatchNormalization(),
@@ -59,19 +60,29 @@ modelo = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return
                                      Dropout(0.15),
                                      CuDNNLSTM(128),
                                      Dropout(0.15),
-                                     Dense(mapa_char-1, activation="softmax")])
+                                     Dense(map_char, activation="softmax")])
 
-modelo.compile(optimizer="adam",
+#We can modify the model to add more layers or change the number of neurons in each layer
+#We can also change the optimizer, the loss function and the metrics
+#Depending on the number of different elements in your smile sequence, map_char can be changed, and you can also change it manually depending on your df
+
+
+model.load_weights(
+    r"")
+#This is used to continue training a model that has already been trained
+
+model.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
+#Different loss functions can be used, but I reccomend categorical_crossentropy
 
-filepath = "rnn_con_+300mw.hdf5"
+filepath = "" #Path to save the model
 checkpoint = ModelCheckpoint(filepath=filepath,
                              monitor='loss',
                              verbose=1,
                              save_best_only=True, mode='min')
 callbacks_list = [checkpoint]
 
-r = modelo.fit(dataset, epochs=150, callbacks=callbacks_list, batch_size=128)
+r = model.fit(dataset, epochs=150, callbacks=callbacks_list, batch_size=128)
 
 plt.plot(r.history["accuracy"], label="accuracy")
 plt.legend()
