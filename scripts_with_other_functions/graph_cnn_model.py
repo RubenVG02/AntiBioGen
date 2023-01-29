@@ -25,4 +25,4 @@ def create_graph(path_data_csv=r""):
     plt.show()
 
 
-crear_gràfiques()
+create_graph()
