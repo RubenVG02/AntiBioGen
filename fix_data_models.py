@@ -53,8 +53,8 @@ def obtain_smiles(origin_file="500k_dades", destination_txt="smiles_22"):
     Function to obtain the smiles from a csv file and store them into a txt file
 
     Parameters:
-        -arx_origen: file from which we will obtain the smiles
-        -arx_desti_txt: file where the smiles will be saved
+        -origin_file: file from which we will obtain the smiles
+        -destination_txt: file where the smiles will be saved
     '''
     dades = pd.read_csv(f"{origin_file}.csv", sep=";",low_memory=False)
     llista_smiles = dades["Smiles"].unique()
