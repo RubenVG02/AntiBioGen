@@ -20,13 +20,13 @@ def selection_mol(id, name_arx="dades", name_df="df"):
     return name_df
 
 
-def clean_data_rnn(name_file="drugs", name_file2="dades_netes"):
+def clean_data_rnn(name_file="drugs", name_file2="clean_data"):
     ''' 
     Function to clean the data and store it into a csv file, which will be ready to be used for the RNN model
     
     Parameters:
-        -arx_name: input file name
-        -name_arx2: name of the net archive
+        -name_file: input file name
+        -name_file2: output file name. By default, "clean_data"
     '''
     arx = pd.read_csv(f"{name_file}.csv", sep=";", index_col=False)
     datfr = arx[arx["Standard Value"].notna()]
@@ -63,10 +63,12 @@ def obtain_smiles(origin_file="500k_dades", destination_txt="smiles_22"):
             f.write(str(line) + "\n")
 
 
-def neteja_dades_afinitat(name_file="inh", destination_file="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
+def clean_data_cnn(name_file="inh", destination_file="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
     '''
-        Parameters:
-         -nom_arx: Name of the source file to modify, in tsv format
+    Function to clean the data and store it into a csv file, which will be ready to be used for the CNN model
+
+    Parameters:
+         -name_file: Name of the source file to modify, in tsv format
          -target_name: Name of the target file to be created
          -col_smiles: Columns from which you want to get the smiles
          -col_ic50: Columns from which to obtain the ic50
@@ -91,11 +93,11 @@ def neteja_dades_afinitat(name_file="inh", destination_file="cnn_arreglat", col_
         smiles.append(i)
 
     headers = ["smiles", "IC50", "sequence"]
-    listas = [smiles, ic50, cadena]
-    with open(f"{destination_file}.csv", "w", encoding="utf8") as archivo:
-        write = csv.writer(archivo)
+    lists = [smiles, ic50, cadena]
+    with open(f"{destination_file}.csv", "w", encoding="utf8") as file:
+        write = csv.writer(file)
         write.writerow(headers)
-        write.writerows(zip(*listas))
+        write.writerows(zip(*lists))
 
     arx = pd.read_csv(f"{destination_file}.csv", sep=",")
     arx["IC50"] = arx["IC50"].str.strip()

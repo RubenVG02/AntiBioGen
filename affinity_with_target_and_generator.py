@@ -27,6 +27,7 @@ def create_file(name_file, headers=["smiles", "IC50", "score"]):
     Function to create the .csv file to which the obtained data will be added
     
     Parameters:
+    -name_file: Name of the file to be created
     -headers: Names of the columns we want to use
     '''
     with open(f"{name_file}.csv", "w", newline="") as file:
@@ -34,7 +35,13 @@ def create_file(name_file, headers=["smiles", "IC50", "score"]):
         writer.writerow(headers)
 
 def upload_mega(name_file):
-    #Function to upload the .csv file to Mega
+    '''
+    Function to upload the file to mega and obtain the link to download it
+
+    Parameters:
+    -name_file: Name of the file to be uploaded
+    
+    '''
     mail="joneltmp+dilzy@gmail.com"
     contra=base64.b64decode("J2NudncnZDkwY253cTljcG53cW5lamR3cHFjbm1qZXcnYzlu")
     contra=contra.decode("UTF-8")
@@ -45,12 +52,22 @@ def upload_mega(name_file):
     print(link)
     return link
     
-def draw_best(ic50_menor, ic50, smiles, nom_arx):
-    #Function to draw the best molecule obtained
-    index=ic50.index(ic50_menor)
+def draw_best(ic50_minor, ic50, smiles, name_file):
+    '''
+    Function to draw the best molecule obtained
+    
+    Parameters:
+    -ic50_minor: Value of the best affinity obtained
+    -ic50: List of all the affinities obtained
+    -smiles: List of all the smiles obtained
+    -name_file: Name of the file where the image will be saved
+    
+    '''
+
+    index=ic50.index(ic50_minor)
     best=smiles[index]
     molecule=Chem.MolFromSmiles(best)
-    Draw.MolToImageFile(molecule, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\molecules/millor_molecula_{nom_arx}.jpg",
+    Draw.MolToImageFile(molecule, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\molecules/millor_molecula_{name_file}.jpg",
             size=(400, 300))
 
 def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)", upload_to_mega=True, draw_minor=True, max_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", accepted_value=100, generate_qr=True):

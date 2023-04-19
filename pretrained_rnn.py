@@ -21,7 +21,9 @@ import time
 def generator(path_model=r"", path_data=r"",
               number_generated=100, img_druglike=True, path_destination_molecules=r""):
     '''
-        Parameters:
+    Function that generates molecules from a pre-trained model.
+    
+    Parameters:
         -path_model: Path where the already trained model is located
         -path_data: Path where the data used is located (path model and path data must have the same dimensions/same amount of different elements)
         -number_generated: Number of molecules that are generated, by default 100
@@ -60,7 +62,6 @@ def generator(path_model=r"", path_data=r"",
     int_2_elements = {i: c for i, c in enumerate(elements_smiles)}
     int_2_elements.update({"\n": -1})
 
-    map_int = len(elements_smiles)
     map_char = len(int_2_elements)
     
     
@@ -144,5 +145,3 @@ def generator(path_model=r"", path_data=r"",
                 pass
         final = ""
     return total_smiles
-
-generator(number_generated=50)

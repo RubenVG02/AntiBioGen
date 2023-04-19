@@ -8,14 +8,14 @@ def compare(data1=r"", data2=r""):
         -data2: Path of the second file with Smiles
         
     Returns:
-        -list with both files
+        -list with the elements that are in data1 but not in data2
     '''
 
 
     data1 = open(data1).read()
     data2 = open(data2).read()
     
-    diferència=list(set(data1)-set(data2))
-    return diferència
+    difference=list(set(data1)-set(data2))
+    return difference
 
 compare()
