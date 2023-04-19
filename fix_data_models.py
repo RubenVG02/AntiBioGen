@@ -50,7 +50,9 @@ def clean_data_rnn(name_file="drugs", name_file2="dades_netes"):
 
 def obtain_smiles(origin_file="500k_dades", destination_txt="smiles_22"):
     '''
-        Parameters:
+    Function to obtain the smiles from a csv file and store them into a txt file
+
+    Parameters:
         -arx_origen: file from which we will obtain the smiles
         -arx_desti_txt: file where the smiles will be saved
     '''
