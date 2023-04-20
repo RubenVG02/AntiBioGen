@@ -7,7 +7,7 @@ from keras.layers import Dropout
 from keras.layers import Dense
 from keras.layers import BatchNormalization
 from keras.callbacks import ModelCheckpoint
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # to plot the loss and accuracy of the model
 
 
 data = open(r"").read()
@@ -65,7 +65,7 @@ model = tf.keras.models.Sequential([CuDNNLSTM(128, input_shape=(137, 1), return_
 #We can modify the model to add more layers or change the number of neurons in each layer
 #We can also change the optimizer, the loss function and the metrics
 #Depending on the number of different elements in your smile sequence, map_char can be changed, and you can also change it manually depending on your df
-
+#The activation function of the last layer must be softmax 
 
 model.load_weights(
     r"")
@@ -73,7 +73,7 @@ model.load_weights(
 
 model.compile(optimizer="adam",
                loss="categorical_crossentropy", metrics=["accuracy"])
-#Different loss functions can be used, but I reccomend categorical_crossentropy
+#Different loss functions can be used, but I recommend categorical_crossentropy 
 
 filepath = "" #Path to save the model
 checkpoint = ModelCheckpoint(filepath=filepath,
