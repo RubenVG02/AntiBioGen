@@ -97,7 +97,7 @@ def generator(path_model=r"", path_data=r"",
                                             Dropout(0.1),
                                             CuDNNLSTM(128),
                                             Dropout(0.1),
-                                            Dense(map_char, activation="softmax")])
+                                            Dense(map_char, activation="softmax")]) #Depending on your data, you will have to change the number of neurons in the last layer
         return model
 
     model = create_model()
@@ -111,7 +111,7 @@ def generator(path_model=r"", path_data=r"",
     final = ""
     total_smiles = []
     for i in range(number_generated):
-        for i in range(random.randrange(100,137)):
+        for i in range(random.randrange(40,137)):
             x = np.reshape(pattern, (1, len(pattern)))
             prediction = model.predict(x, verbose=0)
             index = np.argmax(prediction)  #Get the maximum value from the prediction array
@@ -121,6 +121,10 @@ def generator(path_model=r"", path_data=r"",
             pattern=np.append(pattern, index)
             pattern = pattern[1:len(pattern)]
         final = final.split("\n")
+        if i%10==0:
+            print("\n\n\nChanging seed...\n\n\n")
+            pattern=create_seed(max_molecules=seq_length)  #Change the seed in order to obtain better results and more diversity
+            print("\"", ''.join([int_2_elements[value[0]] for value in pattern]), "\"")
         for i in final:
             mol1 = Chem.MolFromSmiles(i)
             if len(i) > 20:
@@ -138,7 +142,7 @@ def generator(path_model=r"", path_data=r"",
                                 file.write(i + "\n")
                                 if img_druglike == True:
                                     Draw.MolToImageFile(
-                                mol1, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador/molecula{int(time.time())}.jpg", size=(400, 300))
+                                mol1, filename=fr"generated_molecules/molecule{int(time.time())}.jpg", size=(400, 300)) #By default, the images will be saved in the generated_molecules folder by unix time
                         total_smiles.append(i)
                         print("The obtained molecule is drug-like")
             else:
