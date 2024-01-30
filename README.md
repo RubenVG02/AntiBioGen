@@ -33,7 +33,8 @@ To use this project, you need to have Python 3.7 or higher installed. Then, you 
 
 To install the required libraries, use:
 
-```pip install requirements.txt```
+```bash
+pip install requirements.txt```
 
 
 ## Authors
