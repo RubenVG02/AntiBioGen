@@ -35,6 +35,7 @@ To install the required libraries, use:
 
 ```pip install requirements.txt```
 
+
 ## Authors
 
 - [@RubenVG02](https://www.github.com/RubenVG02)
