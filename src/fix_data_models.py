@@ -3,14 +3,15 @@ from chembl_webresource_client.new_client import new_client
 import csv
 
 
-def selection_mol(id, name_arx="dades", name_df="df"):
+def selection_mol(id, name_arx="", name_df=""):
     '''
     Function to obtain all the smiles of a given target, and store them into a csv file
     
     Parameters:
-        -CHEMBL ID
-        -Name of the file (by default, "data1")
-        -Name df (for certain, "df")
+        -id: id of the target (ChEMBL ID)
+        -name_arx: name of the file where the smiles will be stored
+        -name_df: name of the dataframe where the smiles will be stored
+
     '''
     act = new_client.activity
     # IC50: amount of inhibitor subs you need to inhibit at 50%
@@ -20,13 +21,13 @@ def selection_mol(id, name_arx="dades", name_df="df"):
     return name_df
 
 
-def clean_data_rnn(name_file="drugs", name_file2="clean_data"):
+def clean_data_rnn(name_file="", name_file2="clean_data"):
     ''' 
     Function to clean the data and store it into a csv file, which will be ready to be used for the RNN model
     
     Parameters:
-        -name_file: input file name
-        -name_file2: output file name. By default, "clean_data"
+        -name_file: Name of the source file to modify, in csv format
+        -name_file2: Name of the target file to be created
     '''
     arx = pd.read_csv(f"{name_file}.csv", sep=";", index_col=False)
     datfr = arx[arx["Standard Value"].notna()]
@@ -48,7 +49,7 @@ def clean_data_rnn(name_file="drugs", name_file2="clean_data"):
     return f"{name_file2}.csv"
 
 
-def obtain_smiles(origin_file="500k_dades", destination_txt="smiles_22"):
+def obtain_smiles(origin_file="", destination_txt=""):
     '''
     Function to obtain the smiles from a csv file and store them into a txt file
 
@@ -63,7 +64,7 @@ def obtain_smiles(origin_file="500k_dades", destination_txt="smiles_22"):
             f.write(str(line) + "\n")
 
 
-def clean_data_cnn(name_file="inh", destination_file="cnn_arreglat", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
+def clean_data_cnn(name_file="", destination_file="", col_smiles="Ligand SMILES", col_ic50="IC50 (nM)", col_seq="BindingDB Target Chain Sequence"):
     '''
     Function to clean the data and store it into a csv file, which will be ready to be used for the CNN model
 

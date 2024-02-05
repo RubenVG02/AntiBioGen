@@ -142,7 +142,7 @@ def generator(path_model=r"", path_data=r"",
                                 file.write(i + "\n")
                                 if img_druglike == True:
                                     Draw.MolToImageFile(
-                                mol1, filename=fr"generated_molecules/molecule{int(time.time())}.jpg", size=(400, 300)) #By default, the images will be saved in the generated_molecules folder by unix time
+                                mol1, filename=fr"examples/generated_molecules/molecule{int(time.time())}.jpg", size=(400, 300)) #By default, the images will be saved in the generated_molecules folder by unix time
                         total_smiles.append(i)
                         print("The obtained molecule is drug-like")
             else:

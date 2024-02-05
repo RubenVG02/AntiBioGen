@@ -34,21 +34,21 @@ def create_file(name_file, headers=["smiles", "IC50", "score"]):
         writer = csv.writer(file)
         writer.writerow(headers)
 
-def upload_mega(name_file):
+def upload_mega(name_file, mail="", passw=""):
     '''
     Function to upload the file to mega and obtain the link to download it
 
     Parameters:
     -name_file: Name of the file to be uploaded
+    -mail: Mail of the mega account
+    -passw: Password of the mega account
+
     
     '''
-    mail="joneltmp+dilzy@gmail.com"
-    contra=base64.b64decode("J2NudncnZDkwY253cTljcG53cW5lamR3cHFjbm1qZXcnYzlu")
-    contra=contra.decode("UTF-8")
     mega=Mega()
-    mega._login_user(email=mail, password=contra)
-    pujada = mega.upload(f"{name_file}.csv")
-    link=mega.get_upload_link(pujada)
+    mega._login_user(email=mail, password=passw)
+    upload = mega.upload(f"{name_file}.csv")
+    link=mega.get_upload_link(upload)
     print(link)
     return link
     
@@ -67,7 +67,7 @@ def draw_best(ic50_minor, ic50, smiles, name_file):
     index=ic50.index(ic50_minor)
     best=smiles[index]
     molecule=Chem.MolFromSmiles(best)
-    Draw.MolToImageFile(molecule, filename=fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\molecules/millor_molecula_{name_file}.jpg",
+    Draw.MolToImageFile(molecule, filename=fr"examples\results_examples\mols_obtained/best_molecule_{name_file}.jpg",
             size=(400, 300))
 
 def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)", upload_to_mega=True, draw_minor=True, max_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", accepted_value=100, generate_qr=True):
@@ -89,7 +89,7 @@ def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)
     Returns:
     -File .csv with the results obtained with your target of interest.
     -Image in .jpg format of the best molecule obtained by your target, if draw_minor=True
-    -Link to Mega from your .csv if upload_to_mega=Truee
+    -Link to Mega from your .csv if upload_to_mega=True
     '''
     ic50 = []
     smiles = []
@@ -131,7 +131,7 @@ def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)
         enllaç=upload_mega(name_file=name_file_destination)
         if generate_qr:
             qr_generat=qrcode.make(enllaç)
-            qr_generat.save(fr"C:\Users\ASUS\Desktop\github22\dasdsd\resultats\qr/qr_{name_file_destination}.png")
+            qr_generat.save(fr"examples\results_examples\qr_codes_generated/qr_{name_file_destination}.png")
         
     
     '''FQx1aKXvDO4jabS4siLmxw'''
