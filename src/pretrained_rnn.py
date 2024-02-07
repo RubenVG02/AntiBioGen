@@ -18,7 +18,7 @@ import time
 
 
 
-def generator(path_model=r"", path_data=r"",
+def generator(path_model=r"models\definitive_models\rnn_model.hdf5", path_data=r"samples\txt_files\98k.txt",
               number_generated=100, img_druglike=True, path_destination_molecules=r""):
     '''
     Function that generates molecules from a pre-trained model.

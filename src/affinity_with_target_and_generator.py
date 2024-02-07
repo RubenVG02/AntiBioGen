@@ -70,7 +70,7 @@ def draw_best(ic50_minor, ic50, smiles, name_file):
     Draw.MolToImageFile(molecule, filename=fr"examples\results_examples\mols_obtained/best_molecule_{name_file}.jpg",
             size=(400, 300))
 
-def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)", upload_to_mega=True, draw_minor=True, max_molecules=5, db_smiles=True, arx_db=r"C:\Users\ASUS\Desktop\github22\dasdsd\moleculas_generadas\moleculas_nuevo_generador\moleculas_druglike2.txt", accepted_value=100, generate_qr=True):
+def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)", upload_to_mega=True, draw_minor=True, max_molecules=5, db_smiles=True, arx_db=r"examples\generated_molecules\molecules_new_generator\moleculas_druglike2.txt", accepted_value=100, generate_qr=True):
     '''
     Function to generate molecules using an RNN model, and compare their affinity with a specific target, in addition to obtaining a representative score in the
     complexity of its synthesis
@@ -94,7 +94,7 @@ def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)
     ic50 = []
     smiles = []
     score = []
-    create_file(nom_arxiu=name_file_destination)
+    create_file(name_file=name_file_destination)
     valor=0
     while not valor==max_molecules:
         if not db_smiles:
@@ -141,5 +141,6 @@ def find_candidates(target=target, name_file_destination="Alfa_Pol3 (B.Subtilis)
 
 
 
+find_candidates()
 
 
