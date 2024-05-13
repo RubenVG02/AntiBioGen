@@ -24,6 +24,21 @@ To use the combination of both models, use `affinity_with_target_and_generator.p
 
 ## Installation
 
+Via Git Clone:
+```bash
+
+git clone https://github.com/RubenVG02/AntibioticsDiscovery.git
+
+```
+
+Via Lastest Release:
+
+```bash
+
+https://github.com/RubenVG02/AntibioticsDiscovery/releases
+
+```
+
 To use this project, you need to have Python 3.7 or higher installed. Then, you need to install the following libraries:
 - Keras
 - Tensorflow
