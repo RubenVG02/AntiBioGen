@@ -10,7 +10,7 @@ from keras.regularizers import l2
 def calculate_affinity(path_csv=r"", smile="", fasta="", path_model=r""):
     arx = pd.read_csv(f"{path_csv}", sep=",")
 
-    # maximum value that I want my smileys to have, they will be used to train the model
+    # maximum value that I want my SMILES to have, they will be used to train the model
     max_smiles = 100
     elements_smiles = ['6', '3', '=', 'H', 'C', 'O', 'c', '#', 'a', '[', 't', 'r', 'K', 'n', 'B', 'F', '4', '+', ']', '-', '1', 'P',
                        '0', 'L', '%', 'g', '9', 'Z', '(', 'N', '8', 'I', '7', '5', 'l', ')', 'A', 'e', 'o', 'V', 's', 'S', '2', 'M', 'T', 'u', 'i']
