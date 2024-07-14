@@ -22,7 +22,7 @@ This project focuses on discovering and designing new antibiotic compounds based
 
 To predict toxicity using the CNN model, use `check_affinity.py`. You need to specify the path to the model, the path to the data, and the path to the target protein. The program will return the toxicity of the designed bioinsecticides using the `calculate_affinity` function.
 
-### RNN USAGE (Generation) ###
+### RNN Usage (Generation) ###
 
 To generate antibiotic compounds using the RNN model, use `pretrained_rnn.py`. You need to specify the path to the model, the path to the data, and the path to the target protein. The program will return the designed bioinsecticides using the generate function.
 
