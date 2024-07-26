@@ -1,21 +1,22 @@
 from rdkit import Chem
 from rdkit.Chem import Draw
 
-
-smile = "OC(=O)[C@@H](C)[NH2+][C@@H](Cc1c[nH]c2ccccc12)C(=O)NCC(C)C"
-
-
-def draw_smile(smile, filename):
-    '''
-    Function to draw a molecule from a smile sequence
-
+def save_molecule_image(smile, filename="molecule.png"):
+    """
+    Convert a SMILES string to a molecule image and save it to a file.
+    
     Parameters:
-        -smile: SMILE sequence of the molecule
-        -filename: Name of the file where the image will be saved
-    
-    '''
+        smile (str): The SMILES string representing the molecule.
+        filename (str): The path and name of the file where the image will be saved. Defaults to 'molecule.png'.
+    """
     molecule = Chem.MolFromSmiles(smile)
-    Draw.MolToImageFile(molecule, filename=filename,
-                        size=(400, 300))
-
     
+    if molecule is not None:
+        img = Draw.MolToImage(molecule, size=(400, 300))
+        img.save(filename)
+    else:
+        print("Error: Invalid SMILES string or molecule could not be created.")
+
+# Example usage
+smile = "Nc1ccnc2c1ccn2[C@@H]1O[C@H](CO)C[C@H]1O"
+save_molecule_image(smile, "molecule.png")
