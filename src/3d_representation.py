@@ -1,45 +1,60 @@
-import requests
+"""
+This script is used to convert a 3D molecule from SDF format to STL format.
 
-def get_sdf(smile, name):
-    '''
-    Function to obtain the sdf file from a smile sequence in order to be able to represent it in 3D
+In order to run this script, you need to install PyMOL first. It can't be run directly through the terminal, but needs to be run through PyMOL.
+
+You can change the output format by changing the extension of the output file in cmd.save().
+"""
+
+import __main__
+import os
+import pymol
+import requests
+from pymol import cmd
+
+# Configure PyMOL to run in quiet mode with no GUI
+__main__.pymol_argv = ['pymol', '-qc']
+pymol.finish_launching()
+
+def obtain_sdf(smile="", name="molecule_sdf"):
+    """
+    Function to obtain an SDF file of a molecule given its SMILES sequence.
 
     Parameters:
-        -smile: smile sequence from which to obtain the sdf file
-        -name: name of the sdf file to be created
-
-    Returns:
-        -sdf_file: sdf file obtained from the smile sequence
-    '''
-    request=requests.get(f"https://cactus.nci.nih.gov/chemical/structure/{smile}/file?format=sdf&get3d=True")
-    sdf_file=request.text
-    print(sdf_file)
+        smile (str): SMILES sequence of the molecule.
+        name (str): Name of the SDF file to be saved (without extension).
+    
+    """
+    response = requests.get(f"https://cactus.nci.nih.gov/chemical/structure/{smile}/file?format=sdf&get3d=True")
+    sdf_file = response.text
+    
     if "Page not found" in sdf_file:
         print("SDF file not found")
         return "SDF file not found"
     else:
-        with open(f"{name}.sdf","w") as f:
+        with open(f"{name}.sdf", "w") as f:
             f.write(sdf_file)
         print("SDF file created")
+        return "SDF file created"
+
+def get_pymol(smile="", name="molecule_sdf"):
+
+    """
+    Convert an SDF file to STL format using PyMOL.
+
+    Parameters:
+        smile (str): SMILES sequence of the molecule.
+        name (str): Name of the SDF file to be used (without extension).
+    """
+
+    if not os.path.isfile(f"{name}.sdf"):
+        obtain_sdf(smile=smile, name=name)
     
+    cmd.load(f"{name}.sdf")
     
-
-### 3D REPRESENTATION ###
-
-#All these lines need to be run using the PyMol console 
-
-'''
-
-
-# 1. Open PyMol
-open -a PyMOL
-
-# 2. Load the sdf file
-cmd.load('molecule_sdf.sdf')
-
-# 3. Save the molecule in stl format
-cmd.save('molecule_stl.stl')
+    cmd.save('molecule_stl.stl')
     
+    cmd.quit()
 
-
-'''
+# Example usage
+get_pymol(smile='CC(=O)OC1=CC=CC=C1C(=O)O', name='molecule_sdf')
