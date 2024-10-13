@@ -1,8 +1,9 @@
-# Antibiotics Discovery
+# AntiBioGen: AI-Driven Antibiotic Discovery
 
 ## Overview
 
-This project focuses on discovering and designing new antibiotic compounds based on target proteins. It includes tools for predicting toxicity, generating antibiotic compounds, and obtaining 3D structures of designed molecules. The project utilizes neural networks for toxicity prediction and antibiotic generation, alongside genetic algorithms to enhance the design process.
+This project aims to discover and design novel antibiotic compounds targeting specific proteins. It features tools for predicting toxicity, generating antibiotic candidates, and obtaining 3D structures of the designed molecules. Leveraging neural networks for accurate toxicity prediction and efficient antibiotic generation, along with genetic algorithms for design optimization, this project enhances the potential for developing effective and safe antibiotic solutions.
+
 
 ## Usage
 
